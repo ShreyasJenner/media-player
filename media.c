@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_audio.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_quit.h>
 #include <SDL2/SDL_timer.h>
@@ -61,7 +62,12 @@ int main()  {
     // Open audio stream
     Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
     // load the music file
-    Mix_Music *music = Mix_LoadMUS("muisc-files/sample.mp3");
+    Mix_Music *music = Mix_LoadMUS("music-files/sample.mp3");
+
+    if(music==NULL) {
+        printf("Error opening music file\n");
+        exit(1);
+    }
 
     // run the progress bar through another thread
     pthread_create(&thread_id, NULL, progress_bar, NULL);
