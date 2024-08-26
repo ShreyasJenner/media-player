@@ -1,5 +1,5 @@
 Attempt to implement media player
 
 # To-DO:
-- play, pause, rewind, fast-forward options
-- tui/gui for viewing the file
+- SDL screen to display lyrics
+- SDL keyboard events to pause, resume, stop, ... etc
