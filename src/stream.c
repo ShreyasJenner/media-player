@@ -1,6 +1,3 @@
-#include <SDL2/SDL_pixels.h>
-#include <SDL2/SDL_quit.h>
-#include <SDL2/SDL_timer.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdint.h>
@@ -11,12 +8,13 @@
 
 #include "../include/decode_mp3.h"
 
+#define QUEUE_CHUNK 4096 
+
 int main(int argc, char **argv) {
-    int fd, err, play_time;
-    uint8_t data[500];
+    int fd, err, play_time, dev_id;
+    uint8_t data[QUEUE_CHUNK];
     SDL_AudioDeviceID id;
     SDL_AudioSpec desired, obtained;
-    char dev_name[50];
     
     // initalize SDL with audio syb system
     if(SDL_Init(SDL_INIT_AUDIO)<0) {
@@ -25,40 +23,29 @@ int main(int argc, char **argv) {
     }
 
     // get the audio driver name
-    printf("Audio Driver:%s\n", SDL_GetCurrentAudioDriver());
+    printf("Getting audio driver name: %s\n", SDL_GetCurrentAudioDriver());
 
     // get number of playback devices
-    printf("Number of Audio Devices:%d\n",SDL_GetNumAudioDevices(0));
+    printf("Getting audio device count: %d\n",SDL_GetNumAudioDevices(0));
 
     // print current audio devices
+    printf("Getting audio device list:\n");
     for(int i=0; i<SDL_GetNumAudioDevices(0); i++) {
-        printf("%d:%s\n",i,SDL_GetAudioDeviceName(i, 0));
+        printf("\t%d:%s\n",i,SDL_GetAudioDeviceName(i, 0));
     }
 
-    strcpy(dev_name, SDL_GetAudioDeviceName(4, 0));
+    // get output device choice
+    printf("Enter playback device choice[%d-%d]:",0,SDL_GetNumAudioDevices(0)-1);
+    scanf("%d",&dev_id);
 
-    printf("Device Name:%s\n",dev_name);
+    // store preferred audio device specs into struct
+    SDL_GetAudioDeviceSpec(dev_id, 0, &desired);
 
-    /*
-    // load desired struct
-    desired.freq = 441000;
-    desired.format = AUDIO_S16SYS;
-    desired.samples = 1024;
-    */
+    // Open selected device using audio struct as format
+    id = SDL_OpenAudioDevice(SDL_GetAudioDeviceName(dev_id, 0), 0, &desired, &obtained, 0);
 
-    // fill desired with necessary data
-    SDL_GetAudioDeviceSpec(4, 0, &desired);
-
-    printf("freq:%d\n", desired.freq);
-    
-    // Open a device
-    id = SDL_OpenAudioDevice(dev_name, 0, &desired, &obtained, 0);
-
-
-    // check for error
-    printf("Device Id:%d\n", id);
+    // print error if exists
     if(id==0) {
-        // print error if exists
         printf("%s\n",SDL_GetError());
         exit(1);
     }
@@ -66,28 +53,30 @@ int main(int argc, char **argv) {
     // unpause audio device
     SDL_PauseAudioDevice(id, 0);
 
-    // convert mp3 to pcm temporarily
+    // convert mp3 to pcm and store in file
     decode_to_pcm(argv[1], argv[2]);
 
-    // open 2nd file
     fd = open(argv[2], O_RDONLY, 0);
-        
+       
     if(fd<0) {
         printf("File opening error\n");
         exit(1);
     }
     
-    while(read(fd, data, 500)!=0)
+    while(read(fd, data, QUEUE_CHUNK)!=0)
+        // queue audio data into the audio device
         SDL_QueueAudio(id, data, sizeof(data));
 
 
-    // check if quit is requested
+    // play for certain number of seconds
     play_time = 0;
     while(play_time++<5) {
         printf("Queued Data Size:%d\n", SDL_GetQueuedAudioSize(id));
         SDL_Delay(1000);
     } 
 
+
+    // close and clean up resources 
     SDL_CloseAudioDevice(id);
     SDL_Quit();
     close(fd);
