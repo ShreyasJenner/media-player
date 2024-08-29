@@ -1,3 +1,3 @@
 #!/bin/bash
 
- bin/media-stream data/sample2.mp3 data/sample2.pcm
+ bin/media-stream data/sample.mp3 data/sample.pcm

@@ -4,49 +4,59 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_quit.h>
 #include <SDL2/SDL_timer.h>
+#include <locale.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <ncurses.h>
 
-#include "../progress-bar/struct.h"
-#include "../progress-bar/writer.h"
-#include "../progress-bar/progress_bar.h"
+#include "../include/key.h"
+#include "../external/progress-bar/include/progress_bar.h"
 
-void* play_music(Mix_Music *music) {
-    // get the length of the music file in seconds
-    printf("Length of file:%lf\n",Mix_MusicDuration(music));
+void play_music(Mix_Music *music) {
+    int ch;
+    int flag;
 
-    // call the init function for writer
-    struct dimensions *dm = init((int)Mix_MusicDuration(music));
-
-
+    flag = 1;
     // play the audio file
     Mix_PlayMusic(music, 0);
 
     while(!SDL_QuitRequested()) {
-        //printf("%1.0f", Mix_GetMusicPosition(music));
-        get_data(dm, (int)Mix_GetMusicPosition(music));
-        SDL_Delay(1000);
-        //fflush(stdout);
-        //printf("\r");
-       
-        // break out of loop if music is playing
-        if(Mix_PlayingMusic()==0)
+        // music is over
+        if(!Mix_PlayingMusic())
             break;
+
+        ch = getch();
+        if(ch == 'q')
+            break;
+        else if(ch == 32) {
+            if(flag == 1) {
+                Mix_PauseMusic();
+                flag = 0;
+            } else {
+                Mix_ResumeMusic();
+                flag = 1;
+            }
+            ch = '\0';
+        } else if(ch == 261) {
+            Mix_SetMusicPosition((Mix_GetMusicPosition(music)+5));
+        } else if(ch == 260) {
+            Mix_SetMusicPosition((Mix_GetMusicPosition(music)-5));
+        }
+
+        mvprintw(0, 0, "%d\n",(int)Mix_GetMusicPosition(music));
+        progress_bar(Mix_GetMusicPosition(music), Mix_MusicDuration(music));
+
+        SDL_Delay(10);
     }
-
-    // detach the shared memory
-    finish(dm);
-
-    return 0;
 }
 
 int main(int argc, char **argv)  {
-    int result, flags;
+    int result, flags, *quit;
     double len;
     pthread_t thread_id;
 
     result = 0;
-    flags = MIX_INIT_MP3;
+    flags = MIX_INIT_MP3|MIX_INIT_FLAC;
 
 
     // Initalize SDL with audio sub-system
@@ -62,31 +72,37 @@ int main(int argc, char **argv)  {
         exit(1);
     }
 
-    // Open audio stream
-    Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+    // default settings
+    Mix_OpenAudio(41000, AUDIO_S16SYS, 2, 1024);
     // load the music file
     Mix_Music *music = Mix_LoadMUS(argv[1]);
 
-    // if null was returned
     if(music==NULL) {
         printf("Error opening music file\n");
         exit(1);
     }
 
-    // run the progress bar through another thread
-    pthread_create(&thread_id, NULL, progress_bar, NULL);
+    // set up ncurses settings
+    setlocale(LC_ALL, "");
+    initscr();
+    noecho();
+    raw();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, true);
 
-    // play the music file
+    Mix_PlayMusic(music, 0);
+
+    // create a thread to detect key presses
+    //thread_id = pthread_create(&thread_id, NULL, key_detect, &music); 
+
     play_music(music);
 
-    // free the music object
+    // block program until quit is pressed
+    //pthread_join(thread_id, NULL);
+
     Mix_FreeMusic(music);
-
-    // clear up all initaliazed subsystems
     SDL_Quit();
-
-    // clean up thread resources
-    pthread_join(thread_id, NULL);
+    endwin();
 
     return 0;
 }

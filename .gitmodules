@@ -1,0 +1,3 @@
+[submodule "external/progress-bar"]
+	path = external/progress-bar
+	url = git@github.com:ShreyasJenner/progress-bar.git
