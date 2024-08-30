@@ -44,6 +44,7 @@ void play_music(Mix_Music *music) {
         }
 
         mvprintw(0, 0, "%d\n",(int)Mix_GetMusicPosition(music));
+
         progress_bar(Mix_GetMusicPosition(music), Mix_MusicDuration(music));
 
         SDL_Delay(10);
