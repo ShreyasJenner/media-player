@@ -47,7 +47,7 @@ void play_music(Mix_Music *music) {
 
         progress_bar(Mix_GetMusicPosition(music), Mix_MusicDuration(music));
 
-        SDL_Delay(10);
+        SDL_Delay(100);
     }
 }
 
@@ -74,7 +74,7 @@ int main(int argc, char **argv)  {
     }
 
     // default settings
-    Mix_OpenAudio(41000, AUDIO_S16SYS, 2, 1024);
+    Mix_OpenAudio(44100, AUDIO_S32MSB, 2, 2048);
     // load the music file
     Mix_Music *music = Mix_LoadMUS(argv[1]);
 
