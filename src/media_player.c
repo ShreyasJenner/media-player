@@ -8,8 +8,16 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <ncurses.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 
+#include "../include/structs.h"
+#include "../include/mp3_lut.h"
 #include "../include/key.h"
+
+/* external header files */
+#include "../external/id3reader/include/id3reader.h"
 #include "../external/progress-bar/include/progress_bar.h"
 
 void play_music(Mix_Music *music) {
@@ -52,38 +60,55 @@ void play_music(Mix_Music *music) {
 }
 
 int main(int argc, char **argv)  {
-    int result, flags, *quit;
+    int result, flags, *quit, fd;
+    uint8_t frame_header[4];
     double len;
     pthread_t thread_id;
+    struct mp3_frame_header_data mfhd;
 
+    /* external struct for storing id3 tag */
+    struct id3_tag *tag;
+
+    /* read id3 tag from file */
+    fd = open(argv[1], O_RDONLY, 0);
+    if(fd<0) {
+        printf("Opening file erorr\n");
+        exit(1);
+    }
+    tag = get_id3tag(fd);
+
+    /* read frame header bytes of 1st mp3 frame */
+    lseek(fd, tag->size, SEEK_SET);
+    read(fd, frame_header, 4);
+    get_mp3FrameHeader(frame_header, &mfhd);
+
+
+    /* initalize sdl mixer */
     result = 0;
     flags = MIX_INIT_MP3|MIX_INIT_FLAC;
 
-
-    // Initalize SDL with audio sub-system
     if(SDL_Init(SDL_INIT_AUDIO)<0) {
         printf("Failed to init SDL\n");
         exit(1);
     }
 
-    // Check if sdl mixer has managed to load mp3 library needed
     if(flags != (result = Mix_Init(flags))) {
         printf("Could not initalize mixer (result: %d).\n", result);
         printf("Mix_Init: %s\n", Mix_GetError());
         exit(1);
     }
 
-    // default settings
-    Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 2048);
-    // load the music file
-    Mix_Music *music = Mix_LoadMUS(argv[1]);
+    /* use mp3 frame header data to set default settings */
+    Mix_OpenAudioDevice(mfhd.samplerate, AUDIO_S16SYS, mfhd.channel_no, 2048, NULL, 0);
 
+    /* load the music file */
+    Mix_Music *music = Mix_LoadMUS(argv[1]);
     if(music==NULL) {
         printf("Error opening music file\n");
         exit(1);
     }
 
-    // set up ncurses settings
+    /* set up ncurses settings */
     setlocale(LC_ALL, "");
     initscr();
     noecho();
