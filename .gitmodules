@@ -4,3 +4,6 @@
 [submodule "id3reader"]
 	path = id3reader
 	url = git@github.com:ShreyasJenner/id3reader.git
+[submodule "external/id3reader"]
+	path = external/id3reader
+	url = git@github.com:ShreyasJenner/id3reader.git
