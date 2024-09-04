@@ -74,7 +74,7 @@ int main(int argc, char **argv)  {
     }
 
     // default settings
-    Mix_OpenAudio(44100, AUDIO_S32MSB, 2, 2048);
+    Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 2048);
     // load the music file
     Mix_Music *music = Mix_LoadMUS(argv[1]);
 
@@ -102,6 +102,7 @@ int main(int argc, char **argv)  {
     //pthread_join(thread_id, NULL);
 
     Mix_FreeMusic(music);
+    Mix_CloseAudio();
     SDL_Quit();
     endwin();
 

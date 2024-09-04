@@ -1,9 +1,17 @@
+/*
+ * Program stores static lookup tables for mp3 frames.
+ * When passed an array of 4 bytes that contain the mp3 frame header, it reads 
+ * it and returns a struct that contains the mp3 frame information including
+ * the size and number of samples in the frame
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/structs.h"
 #include "../include/mp3_lut.h"
 
 /*
@@ -96,8 +104,36 @@ static const char *emphasis[4] = {
     "none", "50/15 ms", "reserved", "CCIT J.17"
 };
 
-// pass an array of 4 bytes
-void mp3_frame_lookup(uint8_t *bytes) {
+
+/*
+ * Function checks it the byte array passed contains an mp3 frame header
+ * This is not an absolute guarantee that the header passed is one
+ * as, method used to verify if it is an mp3 header is to check the first
+ * 11 bits of the array, and see if they are one
+ * Data can be fabricated to resemble an mp3 frame hedaer by setting the 
+ * 1st 11 bits to one, but may not contain any actual mp3 frame data
+ */
+int verify_mp3Header(uint8_t *bytes) {
+    uint16_t mask;
+
+    /* bit version: 1111 1111 1110 0000 */
+    mask = 65504;
+
+    /* verify if the 1st 11 bits are 1; number is stored as little endian on system */
+    return (((bytes[0]<<8)|bytes[1])&mask) == mask;
+}
+
+/*
+ * Function prints the mp3 frame header deatails onto the terminal when passed 
+ * a byte array containing the mp3 frame header
+ */
+void show_mp3FrameHeader(uint8_t *bytes) {
+    /* verify if mp3 header exists */
+    if(!verify_mp3Header(bytes)) {
+        printf("invalid mp3 frame header\n"); 
+        exit(1);
+    }
+
     float v_id;
     int mp3_layer;
     bool crc;
@@ -137,10 +173,21 @@ void mp3_frame_lookup(uint8_t *bytes) {
     printf("Emphasis: %s\n",emph);
 }
 
-/* store mp3 frame data into struct */ 
-struct mp3_frame_data *mp3_frame_store(uint8_t *bytes) {
-    struct mp3_frame_data *mfd;
+/*
+ * Function to print the mp3 frame details from the frame lookup 
+ * table 
+ * The function is passed an byte array of size 4 that contains
+ * the header of an mp3 frame
+ * It returns a struct containing info about the frame 
+ */
+void get_mp3FrameHeader(uint8_t *bytes, struct mp3_frame_header_data *mfhd) {
+    /* verify if mp3 header exists */
+    if(!verify_mp3Header(bytes)) {
+        printf("invalid mp3 frame header\n"); 
+        exit(1);
+    }
 
+    /* Declaration */
     float v_id;
     int mp3_layer;
     bool crc;
@@ -152,6 +199,7 @@ struct mp3_frame_data *mp3_frame_store(uint8_t *bytes) {
     bool orig;
     char *emph;
 
+    /* get mp3 frame data from lookup tables */
     v_id = mpeg_version_id[(bytes[1]&24u)>>3];
     mp3_layer = layer[(bytes[1]&6u)>>1];
     crc = crc_protection[(bytes[1]&1u)>>0];
@@ -166,36 +214,32 @@ struct mp3_frame_data *mp3_frame_store(uint8_t *bytes) {
     orig = original[(bytes[3]&4u)>>2];
     emph = (char *)emphasis[(bytes[3]&2u)>>0];
 
-    // allocate space for struct
-    mfd = malloc(sizeof(struct mp3_frame_data));
 
-    // store normal data
-    mfd->v_id = v_id;
-    mfd->layer = mp3_layer;
-    mfd->crc = crc;
-    mfd->bitrate = bitrate;
-    mfd->samplerate = samp_rate;
-    mfd->padding = pad;
-    strcpy(mfd->channel, chan);
-    mfd->copyright = copyrit;
-    mfd->original = orig;
-    strcpy(mfd->emphasis, emph);
+    /* allocate space for struct and store data */
+    mfhd->v_id = v_id;
+    mfhd->layer = mp3_layer;
+    mfhd->crc = crc;
+    mfhd->bitrate = bitrate;
+    mfhd->samplerate = samp_rate;
+    mfhd->padding = pad;
+    strcpy(mfhd->channel, chan);
+    mfhd->copyright = copyrit;
+    mfhd->original = orig;
+    strcpy(mfhd->emphasis, emph);
 
-    // store derived data
-    if(mfd->layer==3 || mfd->layer==2) {
-        mfd->frame_size = 1152;
-        mfd->frame_length = 144*mfd->bitrate*1000/mfd->samplerate+mfd->padding;
+    /* store derived data */
+    if(mfhd->layer==3 || mfhd->layer==2) {
+        mfhd->frame_size = 1152;
+        mfhd->frame_length = 144*mfhd->bitrate*1000/mfhd->samplerate+mfhd->padding;
     }
-    else if(mfd->layer==1) {
-        mfd->frame_size = 384;
-        mfd->frame_length = (12*mfd->bitrate*1000/mfd->samplerate+(4*mfd->padding))*4;
+    else if(mfhd->layer==1) {
+        mfhd->frame_size = 384;
+        mfhd->frame_length = (12*mfhd->bitrate*1000/mfhd->samplerate+(4*mfhd->padding))*4;
     }
 
     if(!strcmp(chan,"stereo") || !strcmp(chan,"joint(stereo)") || 
                 !strcmp(chan,"dual(stereo)"))
-        mfd->channel_no = 2;
+        mfhd->channel_no = 2;
     else
-        mfd->channel_no = 1;
-
-    return mfd;
+        mfhd->channel_no = 1;
 }

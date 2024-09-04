@@ -1,3 +1,6 @@
 [submodule "external/progress-bar"]
 	path = external/progress-bar
 	url = git@github.com:ShreyasJenner/progress-bar.git
+[submodule "id3reader"]
+	path = id3reader
+	url = git@github.com:ShreyasJenner/id3reader.git

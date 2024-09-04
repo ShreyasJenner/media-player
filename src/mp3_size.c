@@ -12,6 +12,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+#include "../include/structs.h"
 #include "../include/mp3_lut.h"
 
 
@@ -62,7 +63,7 @@ int reverse_bit_order(int byte) {
 int main(int argc, char **argv) {
     int fd, bytes, i, tmp, flag, pos;
     uint8_t frame[32], byte;
-    struct mp3_frame_data *mfd;
+    struct mp3_frame_header_data mfhd;
 
     fd = open(argv[1], O_RDONLY, 0);
     if(fd < 0) {
@@ -93,7 +94,7 @@ int main(int argc, char **argv) {
 
     /* temp code */
     int itr = 0;
-    int fd2 = open("data/temp.mp3", O_WRONLY|O_CREAT, 0666);
+    int fd2 = open(argv[2], O_WRONLY|O_CREAT, 0666);
     if(fd2<0) {
         printf("fd2 error\n");
         exit(1);
@@ -105,23 +106,22 @@ int main(int argc, char **argv) {
     }
 
     // print mp3 frame details and store in struct
-    mp3_frame_lookup(frame);
-    mfd = mp3_frame_store(frame);
+    show_mp3FrameHeader(frame);
+    get_mp3FrameHeader(frame, &mfhd);
 
 
     /* temp code */
     lseek(fd, -4, SEEK_CUR);
     
-    uint8_t temp_buff[mfd->frame_length];
-    read(fd, temp_buff, mfd->frame_length);
-    write(fd2, temp_buff, mfd->frame_length);
+    uint8_t temp_buff[mfhd.frame_length];
+    read(fd, temp_buff, mfhd.frame_length);
+    write(fd2, temp_buff, mfhd.frame_length);
     read(fd, frame, 4);
     printf("%02x%02x%02x%02x\n", frame[0], frame[1], frame[2], frame[3]);
     }
     close(fd2); 
     /* temp code */
 
-    free(mfd);
     close(fd);
 
     return 0;
