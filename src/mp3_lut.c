@@ -180,11 +180,11 @@ void show_mp3FrameHeader(uint8_t *bytes) {
  * the header of an mp3 frame
  * It returns a struct containing info about the frame 
  */
-void get_mp3FrameHeader(uint8_t *bytes, struct mp3_frame_header_data *mfhd) {
+int get_mp3FrameHeader(uint8_t *bytes, struct mp3_frame_header_data *mfhd) {
     /* verify if mp3 header exists */
     if(!verify_mp3Header(bytes)) {
         printf("invalid mp3 frame header\n"); 
-        exit(1);
+        return -1;
     }
 
     /* Declaration */
@@ -242,4 +242,7 @@ void get_mp3FrameHeader(uint8_t *bytes, struct mp3_frame_header_data *mfhd) {
         mfhd->channel_no = 2;
     else
         mfhd->channel_no = 1;
+
+
+    return 1;
 }

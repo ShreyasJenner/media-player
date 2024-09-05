@@ -49,11 +49,13 @@ void play_music(Mix_Music *music) {
             Mix_SetMusicPosition((Mix_GetMusicPosition(music)+5));
         } else if(ch == 260) {
             Mix_SetMusicPosition((Mix_GetMusicPosition(music)-5));
+        } else if(ch == KEY_RESIZE) {
+            reprint_pb((int)Mix_GetMusicPosition(music), (int)Mix_MusicDuration(music), 0);
         }
 
         mvprintw(0, 0, "%d\n",(int)Mix_GetMusicPosition(music));
 
-        progress_bar(Mix_GetMusicPosition(music), Mix_MusicDuration(music));
+        progress_bar((int)Mix_GetMusicPosition(music), (int)Mix_MusicDuration(music),0);
 
         SDL_Delay(100);
     }
@@ -76,14 +78,20 @@ int main(int argc, char **argv)  {
         exit(1);
     }
     tag = get_id3tag(fd);
+    if(tag == NULL) {
+        printf("id3 tag not available\n");
+    } else {
+        /* CURRENT CODE only supports getting mp3 frames through
+         * id3 tags */
+        /* read frame header bytes of 1st mp3 frame */
+        lseek(fd, tag->size, SEEK_SET);
+        read(fd, frame_header, 4);
+        if(get_mp3FrameHeader(frame_header, &mfhd)<0) {
+            printf("File isnt mp3\n");
+        }
+    }
 
-    /* read frame header bytes of 1st mp3 frame */
-    lseek(fd, tag->size, SEEK_SET);
-    read(fd, frame_header, 4);
-    get_mp3FrameHeader(frame_header, &mfhd);
-
-
-    /* initalize sdl mixer */
+        /* initalize sdl mixer */
     result = 0;
     flags = MIX_INIT_MP3|MIX_INIT_FLAC;
 
@@ -99,7 +107,7 @@ int main(int argc, char **argv)  {
     }
 
     /* use mp3 frame header data to set default settings */
-    Mix_OpenAudioDevice(mfhd.samplerate, AUDIO_S16SYS, mfhd.channel_no, 2048, NULL, 0);
+    Mix_OpenAudioDevice(mfhd.samplerate, AUDIO_S16SYS, mfhd.channel_no, 4096, NULL, 0);
 
     /* load the music file */
     Mix_Music *music = Mix_LoadMUS(argv[1]);
