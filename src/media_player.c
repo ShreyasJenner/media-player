@@ -1,17 +1,13 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_audio.h>
-#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_quit.h>
-#include <SDL2/SDL_timer.h>
 #include <locale.h>
 #include <stdio.h>
-#include <pthread.h>
 #include <ncurses.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 
+/* header files */
 #include "structs.h"
 #include "mp3_lut.h"
 #include "key.h"
@@ -20,6 +16,10 @@
 #include "id3reader/include/id3reader.h"
 #include "progress-bar/include/progress_bar.h"
 
+
+/*
+ * 
+ */
 void play_music(Mix_Music *music) {
     int ch;
     int flag;
