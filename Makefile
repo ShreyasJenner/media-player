@@ -1,6 +1,35 @@
-all:
-	@gcc -o bin/media_player src/{media_player.c,mp3_lut.c,key.c} \
-	external/progress-bar/src/progress_bar.c \
-	external/id3reader/src/{syncint.c,jpeg_writer.c,tag_reader.c,frame_reader.c,free.c} -lSDL2_mixer -lSDL2 -lpthread -lncurses
-	@#gcc -o media_dets media_det.c -lSDL2_mixer -lSDL2
-	@#gcc -o bin/media-stream src/{stream.c,decode_mp3.c} -lmpg123 -lSDL2
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -ncurses -SDL2 -SDL2_Mixer -Iinclude
+
+# Directories
+SRCDIR = src
+OBJDIR = obj
+
+# Files
+SRC = $(wildcard $(SRCDIR)/*.c)
+OBJ = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+
+# Libraries
+ID3_LIB = external/progress-bar/lib/id3reader.a
+
+
+# Rules
+all: $() $() $(OBJ)
+
+pbar_make:
+	cd external/progress-bar && make
+
+id3_make:
+	cd external/id3reader && make
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+clean:
+	rm -rf $(OBJDIR)/*.o
+
+.PHONY: all clean
