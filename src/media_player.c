@@ -12,13 +12,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "../include/structs.h"
-#include "../include/mp3_lut.h"
-#include "../include/key.h"
+#include "structs.h"
+#include "mp3_lut.h"
+#include "key.h"
 
 /* external header files */
-#include "../external/id3reader/include/id3reader.h"
-#include "../external/progress-bar/include/progress_bar.h"
+#include "id3reader/include/id3reader.h"
+#include "progress-bar/include/progress_bar.h"
 
 void play_music(Mix_Music *music) {
     int ch;
@@ -62,10 +62,8 @@ void play_music(Mix_Music *music) {
 }
 
 int main(int argc, char **argv)  {
-    int result, flags, *quit, fd;
+    int result, flags, fd;
     uint8_t frame_header[4];
-    double len;
-    pthread_t thread_id;
     struct mp3_frame_header_data mfhd;
 
     /* external struct for storing id3 tag */

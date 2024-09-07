@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/structs.h"
-#include "../include/mp3_lut.h"
+#include "structs.h"
+#include "mp3_lut.h"
 
 /*
  * 00 - v2.5
