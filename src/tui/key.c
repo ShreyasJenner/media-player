@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include <SDL2/SDL_mixer.h>
 
-#include "../include/key.h"
+#include "key.h"
 
 void* key_detect(void *music) {
     int ch, flag;
