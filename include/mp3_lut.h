@@ -1,7 +1,7 @@
 #ifndef MP3_LUT_H
 #define MP3_LUT_H
 
-#include <stdint.h>
+#include "stdheader.h"
 
 int verify_mp3Header(uint8_t *bytes);
 

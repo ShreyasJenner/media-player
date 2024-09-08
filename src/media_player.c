@@ -1,20 +1,15 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
-#include <locale.h>
-#include <stdio.h>
-#include <ncurses.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-
 /* header files */
+#include "stdheader.h"
 #include "structs.h"
+#include "tree.h"
 #include "mp3_lut.h"
 #include "key.h"
 
 /* external header files */
 #include "id3reader/include/id3reader.h"
 #include "progress-bar/include/progress_bar.h"
+#include <fcntl.h>
+#include <stdio.h>
 
 
 /*
@@ -69,8 +64,21 @@ int main(int argc, char **argv)  {
     /* external struct for storing id3 tag */
     struct id3_tag *tag;
 
+    /* temp code */
+    int choice;
+    struct Node tree;
+    get_DirTree(&tree, argv[1]);
+    print_tree(&tree);
+
+
+    fflush(stdin);
+    scanf("%d",&choice);
+    printf("%s\n",tree.children[choice]->name);
+    fd = open(tree.children[choice]->name, O_RDONLY, 0);
+    /* temp code */
+
     /* read id3 tag from file */
-    fd = open(argv[1], O_RDONLY, 0);
+    //fd = open(argv[1], O_RDONLY, 0);
     if(fd<0) {
         printf("Opening file erorr\n");
         exit(1);
@@ -107,8 +115,11 @@ int main(int argc, char **argv)  {
     /* use mp3 frame header data to set default settings */
     Mix_OpenAudioDevice(mfhd.samplerate, AUDIO_S16SYS, mfhd.channel_no, 4096, NULL, 0);
 
+    /* temp code */
+    Mix_Music *music = Mix_LoadMUS(tree.children[choice]->name);
+    /* temp code */
     /* load the music file */
-    Mix_Music *music = Mix_LoadMUS(argv[1]);
+    //Mix_Music *music = Mix_LoadMUS(argv[1]);
     if(music==NULL) {
         printf("Error opening music file\n");
         exit(1);
@@ -122,6 +133,7 @@ int main(int argc, char **argv)  {
     keypad(stdscr, TRUE);
     nodelay(stdscr, true);
 
+    /* play music with 0 loops */
     Mix_PlayMusic(music, 0);
 
     // create a thread to detect key presses
@@ -136,6 +148,10 @@ int main(int argc, char **argv)  {
     Mix_CloseAudio();
     SDL_Quit();
     endwin();
+
+    /* temp code */
+    free_Tree(&tree);
+    /* temp code */
 
     return 0;
 }

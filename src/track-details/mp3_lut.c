@@ -5,12 +5,7 @@
  * the size and number of samples in the frame
  */
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include "stdheader.h"
 #include "structs.h"
 #include "mp3_lut.h"
 

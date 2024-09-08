@@ -1,6 +1,24 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+#define FILE_NAME_SZ 256
+
+/*
+ * name: name of file
+ * type: 'f' for file; 'd' for dir
+ * format: audio format
+ * count: number of children and sub-children files/dir
+ * children: array of children files/dir 
+ */
+struct Node {
+    char name[FILE_NAME_SZ];
+    char type;
+    char format[5];
+    int count;
+    struct Node **children;
+};
+
+
 /*
  * Refer mp3_lut.c file to get a list of all the flag details
  * OR 

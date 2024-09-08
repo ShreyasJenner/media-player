@@ -1,7 +1,7 @@
 #ifndef KEY_H
 #define KEY_H
 
-#include <SDL2/SDL_mixer.h>
+#include "stdheader.h"
 
 void* key_detect(void *music);
 
