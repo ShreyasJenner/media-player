@@ -13,7 +13,7 @@ void get_DirTree(struct Node *tree, char *dirname);
 
 void free_Tree(struct Node *node);
 
-void print_tree(struct Node *node);
+void print_tree(struct Node *node, int count);
 
 
 #endif

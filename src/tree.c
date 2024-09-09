@@ -176,14 +176,17 @@ void free_Tree(struct Node *node) {
 /*
  * Function to print tree
  */
-void print_tree(struct Node *node) {
-    int i;
+void print_tree(struct Node *node, int count) {
+    int i,j;
 
     i = 0;
     while(i<node->count) {
+        for(j=0;j<count;j++)
+            printf("\t");
+
         printf("%s\n",node->children[i]->name);
         if(node->children[i]->type=='d') {
-            print_tree(node->children[i]);
+            print_tree(node->children[i],count+1);
         }
         i++;
     }

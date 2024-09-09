@@ -10,6 +10,7 @@
 #include "progress-bar/include/progress_bar.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /*
@@ -68,9 +69,13 @@ int main(int argc, char **argv)  {
     int choice;
     struct Node tree;
     get_DirTree(&tree, argv[1]);
-    print_tree(&tree);
+    print_tree(&tree,0);
 
     scanf("%d",&choice);
+    if(choice==-1) {
+        free_Tree(&tree);
+        exit(1);
+    }
     printf("%s\n",tree.children[choice]->name);
     fd = open(tree.children[choice]->name, O_RDONLY, 0);
     /* temp code */
