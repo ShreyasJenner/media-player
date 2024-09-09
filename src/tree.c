@@ -8,7 +8,7 @@
 
 #include "stdheader.h"
 #include "structs.h"
-#include <SDL2/SDL_shape.h>
+#include "log.h"
 
 /*
  * Get count of files and sub-dirs under dir passed
@@ -24,7 +24,7 @@ int get_ChildCount(char *dirname) {
     /* Initialization */
     dir = opendir(dirname);
     if(dir == NULL) {
-        printf("Error in function %s:%s\n",__func__,"opening directory");
+        logerror(__func__,"opening directory");
         return -1;
     }
     count = 0;
@@ -53,11 +53,11 @@ int get_ChildCount(char *dirname) {
  * Eg: /media is main file; /media/example is an example directory/file 
  * under media
  */
-void store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
+int store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
     /* Declaration */
     DIR *dir;
     struct dirent *entry;
-    int i, tmp;
+    int i, ret_val;
 
     /* Initialization */
     i = 0;
@@ -65,32 +65,32 @@ void store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
     /* open directory */
     dir = opendir(dirname);
     if(dir == NULL) {
-        perror("opening dir for storing node details");
-        return;
+        logerror(__func__, "opening dir for storing node details");
+        return -1;
     }
 
     /* loop to iterate through dir entries */
     for(entry=readdir(dir);entry!=NULL;entry=readdir(dir)) {
         if(entry == NULL) {
-            printf("Error in function %s: %s\n",__func__,"reading directory stream");
-            exit(1);
+            logerror(__func__, "reading directory stream");
+            return -1;
         }
         /* if the current node is not '.' or '..' */
         if(strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
             /* allocate space for node's child */
             node->children[i] = malloc(sizeof(struct Node));
             if(node->children[i] == NULL) {
-                perror("malloc");
+                logerror(__func__, "malloc error while allocating for children nodes");
                 closedir(dir);
-                return;
+                return -1;
             }
 
             /* prepend parent dir name to child dir */
-            tmp = snprintf(node->children[i]->name, FILE_NAME_SZ, "%s/%s", dirname, entry->d_name);
-            if(tmp>=FILE_NAME_SZ) {
-                perror("file name buffer too small");
-                    closedir(dir);
-                    return;
+            ret_val = snprintf(node->children[i]->name, FILE_NAME_SZ, "%s/%s", dirname, entry->d_name);
+            if(ret_val>=FILE_NAME_SZ) {
+                logerror(__func__, "file name buffer too small");
+                closedir(dir);
+                return -1;
             }
 
             /* set children to NULL if node is a regular file */
@@ -116,11 +116,11 @@ void store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
                 if(node->children[i]->childcount > 0) {
                     node->children[i]->children = malloc(sizeof(struct Node *) * node->children[i]->childcount);
                     if(node->children[i]->children == NULL) {
-                        perror("malloc");
+                        logerror(__func__, "malloc error while allocating struct array"); 
                         closedir(dir);
-                        return;
+                        return -1;
                     }
-                    store_FileDetails(node->children[i]->name, node->children[i], tree);
+                    ret_val = store_FileDetails(node->children[i]->name, node->children[i], tree);
                 /* else set children to NULL */
                 } else {
                     node->children[i]->children = NULL;
@@ -131,6 +131,8 @@ void store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
         }
     }
     closedir(dir);
+
+    return 0;
 }
 
 
@@ -138,8 +140,12 @@ void store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
 
  * Function to create a tree containing the directory and file tree of the 
  * passed directory
+ * Returns: 0 => no error 
+ *          -1 => error
  */
-void get_DirTree(struct Tree *tree, char *dirname) {
+int get_DirTree(struct Tree *tree, char *dirname) {
+    /* Declaration */
+    int ret_val;
 
     /* store dir details */
     strcpy(tree->root.name, dirname);
@@ -152,15 +158,20 @@ void get_DirTree(struct Tree *tree, char *dirname) {
     if(tree->root.childcount > 0) {
         tree->root.children = malloc(sizeof(struct Node *) * tree->root.childcount);
         if (tree->root.children == NULL) {
-            perror("malloc");
-            exit(EXIT_FAILURE);
+            logerror(__func__, "Malloc error while creating space for root children");
+            return -1;
         }
         /* store data for children nodes */
-        store_FileDetails(dirname, &(tree->root), tree);
+        ret_val = store_FileDetails(dirname, &(tree->root), tree);
+        if(ret_val!=0) {
+            logerror(__func__, "Error in calling function store_FileDetails");
+        }
     } else {
     /* set children to NULL */
         tree->root.children = NULL;
     }
+
+    return 0;
 }
 
 
@@ -218,7 +229,7 @@ void print_tree(struct Node *node, int count) {
  */
 int search_Tree(struct Tree tree, char *pattern, char filelist[][FILE_NAME_SZ]) {
     /* Declaration */
-    int i, j, filelist_itr, queueend, err; 
+    int i, j, filelist_itr, queueend, ret_val; 
 
     regex_t reg;
     struct Node *dirqueue[tree.dircount];
@@ -231,10 +242,10 @@ int search_Tree(struct Tree tree, char *pattern, char filelist[][FILE_NAME_SZ]) 
     filelist_itr = 0;
     dirqueue[i] = &(tree.root);
     queueend = 1;
-    err = regcomp(&reg, pattern, REG_ICASE);
-    if(err != 0) {
-        printf("Reg comp error\n");
-        exit(1);
+    ret_val = regcomp(&reg, pattern, REG_ICASE);
+    if(ret_val != 0) {
+        logerror(__func__, "Regex compiling error");
+        return -1;
     }
 
     /* while queue isnt empty */

@@ -2,15 +2,12 @@
 #include "stdheader.h"
 #include "structs.h"
 #include "tree.h"
+#include "log.h"
 #include "mp3_lut.h"
-#include "key.h"
 
 /* external header files */
 #include "id3reader/include/id3reader.h"
 #include "progress-bar/include/progress_bar.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 
 /*
@@ -64,16 +61,21 @@ int main(int argc, char **argv)  {
     /* temp code */
     struct Tree tree;
     int matches, choice;
-    get_DirTree(&tree, argv[1]);
+    result = get_DirTree(&tree, argv[1]);
+    if(result!=0) {
+        logerror(__func__, "Calling get_DirTree");
+        return 0;
+    }
     char pattern[FILE_NAME_SZ];
     char filelist[tree.filecount][FILE_NAME_SZ];
     printf("Tree dirs:%d\n",tree.dircount);
     printf("Tree files:%d\n",tree.filecount);
 
-    scanf("%s",pattern);
+    scanf("%[^\n]",pattern);
     matches = search_Tree(tree, pattern, filelist);
     
     if(matches==0 || !strcmp(pattern,"-1")) {
+        printf("No matches\n");
         free_Tree(&tree.root);
         exit(1);
     }

@@ -6,10 +6,10 @@
 
 int get_ChildCount(char *dirname);
 
-void store_FileDetails(char *dirname, struct Node *node, 
+int store_FileDetails(char *dirname, struct Node *node, 
         struct Tree *tree);
 
-void get_DirTree(struct Tree *tree, char *dirname);
+int get_DirTree(struct Tree *tree, char *dirname);
 
 void free_Tree(struct Node *node);
 
