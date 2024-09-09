@@ -70,8 +70,6 @@ int main(int argc, char **argv)  {
     get_DirTree(&tree, argv[1]);
     print_tree(&tree);
 
-
-    fflush(stdin);
     scanf("%d",&choice);
     printf("%s\n",tree.children[choice]->name);
     fd = open(tree.children[choice]->name, O_RDONLY, 0);
