@@ -1,22 +1,36 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-#define FILE_NAME_SZ 256
+#define FILE_NAME_SZ 512 
 
 /*
  * name: name of file
  * type: 'f' for file; 'd' for dir
  * format: audio format
- * count: number of children and sub-children files/dir
+ * childcount: number of immediate children and sub-children files/dir
  * children: array of children files/dir 
  */
 struct Node {
     char name[FILE_NAME_SZ];
     char type;
     char format[5];
-    int count;
+    int childcount;
     struct Node **children;
 };
+
+
+/*
+ * root: pointer to root node of tree
+ * filecount: number of files
+ * dircount: number of directories including root
+ */
+struct Tree {
+    struct Node root;
+    int filecount;
+    int dircount;
+};
+
+
 
 
 /*

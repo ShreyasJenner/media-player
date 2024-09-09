@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <regex.h>
 #include <sys/types.h>
 #include <unistd.h>
 

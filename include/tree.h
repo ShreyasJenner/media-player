@@ -4,16 +4,16 @@
 #include "stdheader.h"
 #include "structs.h"
 
-int get_ChildCount(DIR *dir);
+int get_ChildCount(char *dirname);
 
 void store_FileDetails(char *dirname, struct Node *node, 
-        struct Node *root);
+        struct Tree *tree);
 
-void get_DirTree(struct Node *tree, char *dirname);
+void get_DirTree(struct Tree *tree, char *dirname);
 
 void free_Tree(struct Node *node);
 
 void print_tree(struct Node *node, int count);
 
-
+int search_Tree(struct Tree tree, char *pattern, char filelist[][FILE_NAME_SZ]);
 #endif

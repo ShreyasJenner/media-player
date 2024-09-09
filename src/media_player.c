@@ -58,49 +58,31 @@ void play_music(Mix_Music *music) {
 }
 
 int main(int argc, char **argv)  {
-    int result, flags, fd;
-    uint8_t frame_header[4];
-    struct mp3_frame_header_data mfhd;
-
-    /* external struct for storing id3 tag */
-    struct id3_tag *tag;
+    /* Declaration */
+    int result, flags;
 
     /* temp code */
-    int choice;
-    struct Node tree;
+    struct Tree tree;
+    int matches, choice;
     get_DirTree(&tree, argv[1]);
-    print_tree(&tree,0);
+    char pattern[FILE_NAME_SZ];
+    char filelist[tree.filecount][FILE_NAME_SZ];
+    printf("Tree dirs:%d\n",tree.dircount);
+    printf("Tree files:%d\n",tree.filecount);
 
+    scanf("%s",pattern);
+    matches = search_Tree(tree, pattern, filelist);
+    
+    if(matches==0 || !strcmp(pattern,"-1")) {
+        free_Tree(&tree.root);
+        exit(1);
+    }
+    for(int i=0;i<matches;i++)
+        printf("%d:%s\n",i,filelist[i]);
     scanf("%d",&choice);
-    if(choice==-1) {
-        free_Tree(&tree);
-        exit(1);
-    }
-    printf("%s\n",tree.children[choice]->name);
-    fd = open(tree.children[choice]->name, O_RDONLY, 0);
-    /* temp code */
+    printf("Chosen file:%s\n",filelist[choice]);
 
-    /* read id3 tag from file */
-    //fd = open(argv[1], O_RDONLY, 0);
-    if(fd<0) {
-        printf("Opening file erorr\n");
-        exit(1);
-    }
-    tag = get_id3tag(fd);
-    if(tag == NULL) {
-        printf("id3 tag not available\n");
-    } else {
-        /* CURRENT CODE only supports getting mp3 frames through
-         * id3 tags */
-        /* read frame header bytes of 1st mp3 frame */
-        lseek(fd, tag->size, SEEK_SET);
-        read(fd, frame_header, 4);
-        if(get_mp3FrameHeader(frame_header, &mfhd)<0) {
-            printf("File isnt mp3\n");
-        }
-    }
-
-        /* initalize sdl mixer */
+    /* initalize sdl mixer */
     result = 0;
     flags = MIX_INIT_MP3|MIX_INIT_FLAC;
 
@@ -116,13 +98,10 @@ int main(int argc, char **argv)  {
     }
 
     /* use mp3 frame header data to set default settings */
-    Mix_OpenAudioDevice(mfhd.samplerate, AUDIO_S16SYS, mfhd.channel_no, 4096, NULL, 0);
+    Mix_OpenAudioDevice(48000, AUDIO_S16SYS, 2, 4096, NULL, 0);
 
-    /* temp code */
-    Mix_Music *music = Mix_LoadMUS(tree.children[choice]->name);
-    /* temp code */
     /* load the music file */
-    //Mix_Music *music = Mix_LoadMUS(argv[1]);
+    Mix_Music *music = Mix_LoadMUS(filelist[choice]);
     if(music==NULL) {
         printf("Error opening music file\n");
         exit(1);
@@ -153,7 +132,7 @@ int main(int argc, char **argv)  {
     endwin();
 
     /* temp code */
-    free_Tree(&tree);
+    free_Tree(&tree.root);
     /* temp code */
 
     return 0;
