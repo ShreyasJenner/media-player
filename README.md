@@ -1,4 +1,5 @@
 Attempt to implement media player
 
 # To-DO:
-- Clean up mp3_player.c file
+- sort the file list returned by search tree in order of parent folder and track number
+
