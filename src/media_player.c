@@ -3,11 +3,15 @@
 #include "structs.h"
 #include "tree.h"
 #include "log.h"
+#include "tui.h"
 #include "mp3_lut.h"
 
 /* external header files */
 #include "id3reader/include/id3reader.h"
 #include "progress-bar/include/progress_bar.h"
+#include <ncurses.h>
+#include <regex.h>
+#include <time.h>
 
 
 /*
@@ -49,6 +53,7 @@ void play_music(Mix_Music *music) {
         mvprintw(0, 0, "%d\n",(int)Mix_GetMusicPosition(music));
 
         progress_bar((int)Mix_GetMusicPosition(music), (int)Mix_MusicDuration(music),0);
+        wrefresh(stdscr);
 
         SDL_Delay(100);
     }
@@ -57,32 +62,31 @@ void play_music(Mix_Music *music) {
 int main(int argc, char **argv)  {
     /* Declaration */
     int result, flags;
-
-    /* temp code */
+    char sel_file[FILE_NAME_SZ];
     struct Tree tree;
-    int matches, choice;
+
+    
+    
+    /* set up ncurses settings */
+    setlocale(LC_ALL, "");
+    initscr();
+    noecho();
+    raw();
+    keypad(stdscr, TRUE);
+    scrollok(stdscr, TRUE);
+    mousemask(ALL_MOUSE_EVENTS, NULL);
+    nodelay(stdscr, true);
+
+    /* get dir tree */
     result = get_DirTree(&tree, argv[1]);
     if(result!=0) {
         logerror(__func__, "Calling get_DirTree");
         return 0;
     }
-    char pattern[FILE_NAME_SZ];
-    char filelist[tree.filecount][FILE_NAME_SZ];
-    printf("Tree dirs:%d\n",tree.dircount);
-    printf("Tree files:%d\n",tree.filecount);
 
-    scanf("%[^\n]",pattern);
-    matches = search_Tree(tree, pattern, filelist);
-    
-    if(matches==0 || !strcmp(pattern,"-1")) {
-        printf("No matches\n");
-        free_Tree(&tree.root);
-        exit(1);
-    }
-    for(int i=0;i<matches;i++)
-        printf("%d:%s\n",i,filelist[i]);
-    scanf("%d",&choice);
-    printf("Chosen file:%s\n",filelist[choice]);
+    /* search tree for matching list */
+    search_MusicList(tree, sel_file); 
+
 
     /* initalize sdl mixer */
     result = 0;
@@ -103,19 +107,11 @@ int main(int argc, char **argv)  {
     Mix_OpenAudioDevice(48000, AUDIO_S16SYS, 2, 4096, NULL, 0);
 
     /* load the music file */
-    Mix_Music *music = Mix_LoadMUS(filelist[choice]);
+    Mix_Music *music = Mix_LoadMUS(sel_file);
     if(music==NULL) {
         printf("Error opening music file\n");
         exit(1);
     }
-
-    /* set up ncurses settings */
-    setlocale(LC_ALL, "");
-    initscr();
-    noecho();
-    raw();
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, true);
 
     /* play music with 0 loops */
     Mix_PlayMusic(music, 0);
