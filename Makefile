@@ -1,7 +1,8 @@
 # Compiler and flags
 CC=gcc
-CFLAGS=-Wall -lncurses -lSDL2 -lSDL2_mixer -Iinclude \
-	   -Iexternal \
+CFLAGS=-Wall -lncurses -lmenu -lpanel \
+-lSDL2 -lSDL2_mixer \
+-Iinclude -Iexternal \
 
 # Directories
 SRCDIR=src
