@@ -13,6 +13,7 @@ ID3_LIBDIR=external/id3reader/lib
 BINDIR=bin
 
 # Files
+MAIN=main
 SRC=$(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/**/*.c)
 OBJ=$(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 BIN=$(BINDIR)/media_player

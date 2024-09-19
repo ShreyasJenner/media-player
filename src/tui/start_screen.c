@@ -13,11 +13,6 @@
 #include "tui/start_screen.h"
 #include "log.h"
 #include "stdheader.h"
-#include "structs.h"
-#include <curses.h>
-#include <eti.h>
-#include <menu.h>
-#include <stdio.h>
 
 /*
  * Function assigns a window, menu and items to a panel

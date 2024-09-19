@@ -1,5 +1,5 @@
-#ifndef TUI_H
-#define TUI_H
+#ifndef SEARCH_LIST_H
+#define SEARCH_LIST_H
 
 #include "stdheader.h"
 #include "structs.h"

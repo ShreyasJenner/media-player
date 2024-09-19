@@ -16,11 +16,9 @@ void interface_ss_mp(struct Node *node, char (*filelist)[2][FILE_NAME_SZ]) {
 
   /* Iterate through tree nodes and store in char array */
   i = 0;
-  fprintf(stderr, "Child count: %d\n", node->childcount);
   while (i < node->childcount) {
     sprintf(filelist[i][0], "%d", i);
     strcpy(filelist[i][1], node->children[i]->name);
-    fprintf(stderr, "%s:%s\n", filelist[i][0], filelist[i][1]);
     i++;
   }
 }
