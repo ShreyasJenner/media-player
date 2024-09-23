@@ -13,6 +13,7 @@
 #include "tui/start_screen.h"
 #include "log.h"
 #include "stdheader.h"
+#include "structs.h"
 
 /*
  * Function assigns a window, menu and items to a panel
@@ -20,8 +21,8 @@
  * Menu, items and window must be freed later in deinit function
  * Returns 0 on success
  */
-MENU *start_screen_init(PANEL **panel, char filelist[][2][FILE_NAME_SZ],
-                        int len) {
+MENU *start_screen_init(PANEL **panel, char (*filepath)[FILE_NAME_SZ],
+                        char (*filename)[FILE_NAME_SZ], int len) {
   /* Declaration */
   int i, x, y;
 
@@ -49,7 +50,7 @@ MENU *start_screen_init(PANEL **panel, char filelist[][2][FILE_NAME_SZ],
 
   /* Loop to create the items and their descriptions */
   for (i = 0; i < len; i++) {
-    items[i] = new_item(filelist[i][0], filelist[i][1]);
+    items[i] = new_item(filepath[i], filename[i]);
     if (items[i] == NULL) {
       logerror(__func__, "Item creation");
       return NULL;
@@ -110,9 +111,9 @@ const char *handle_keypress(MENU *menu, int key) {
     menu_driver(menu, REQ_RIGHT_ITEM);
     break;
 
-    // enter key to return item description
+    // return pointer to item description if enter key pressed
   case 10:
-    sel = item_description(current_item(menu));
+    sel = item_name(current_item(menu));
     break;
 
   default:
