@@ -1,6 +1,6 @@
 # Compiler and flags
 CC=gcc
-CFLAGS=-Wall -lncurses -lmenu -lpanel \
+CFLAGS=-Wall -g -lncurses -lmenu -lpanel \
 -lSDL2 -lSDL2_mixer \
 -Iinclude -Iexternal \
 

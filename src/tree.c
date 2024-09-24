@@ -85,7 +85,9 @@ int store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
         return -1;
       }
 
-      /* prepend parent dir name to child dir */
+      /* point parent ptr to parent node and prepend parent dir name to child
+       * dir */
+      node->children[i]->parent = node;
       ret_val = snprintf(node->children[i]->name, FILE_NAME_SZ, "%s/%s",
                          dirname, entry->d_name);
       if (ret_val >= FILE_NAME_SZ) {
@@ -145,7 +147,7 @@ int store_FileDetails(char *dirname, struct Node *node, struct Tree *tree) {
  * Returns: 0 => no error
  *          -1 => error
  */
-int get_DirTree(struct Tree *tree, char *dirname) {
+int create_DirTree(struct Tree *tree, char *dirname) {
   /* Declaration */
   int ret_val;
 
@@ -154,6 +156,7 @@ int get_DirTree(struct Tree *tree, char *dirname) {
   tree->root.type = 'd';
   tree->root.childcount = get_ChildCount(dirname);
   tree->dircount = 1;
+  tree->root.parent = NULL;
   tree->filecount = 0;
 
   /* if the dir has sub-dirs/files, then allocate space for children nodes */

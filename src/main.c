@@ -15,11 +15,6 @@
 /* external header files */
 #include "id3reader/include/id3reader.h"
 #include "progress-bar/include/progress_bar.h"
-#include <curses.h>
-#include <panel.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 int main(int argc, char **argv) {
   /* check if file arg has been passed */
@@ -37,15 +32,15 @@ int main(int argc, char **argv) {
   tui_init();
 
   /* get dir tree */
-  result = get_DirTree(&tree, argv[1]);
+  result = create_DirTree(&tree, argv[1]);
   if (result != 0) {
-    logerror(__func__, "Calling get_DirTree");
+    logerror(__func__, "Calling create_DirTree");
     return 0;
   }
 
-  // NOTE: temp code to check start screen
-  char filepath[tree.root.childcount][FILE_NAME_SZ],
-      filename[tree.root.childcount][FILE_NAME_SZ];
+  // NOTE: temp code to run start screen
+  char filepath[tree.filecount + tree.dircount][FILE_NAME_SZ],
+      filename[tree.filecount + tree.dircount][FILE_NAME_SZ];
   struct Node *ptr;
   char *sel_ptr;
   int ch;
@@ -61,14 +56,23 @@ int main(int argc, char **argv) {
   while ((ch = getch()) != 'q') {
     sel_ptr = (char *)handle_keypress(menu, ch);
     if (sel_ptr != NULL) {
-      ptr = search_NodeWithValue(tree, sel_ptr);
+      if (!strcmp(sel_ptr, "..")) {
+        if (ptr->parent != NULL) {
+          ptr = ptr->parent;
+        }
+      } else {
+        ptr = search_NodeWithValue(tree, sel_ptr);
+      }
 
-      /* check if the returned node has children */
-      if (ptr->childcount != 0) {
-        /* get the values of the children of the returned node and then updated
-         * the menu */
-        interface_ss_mp(search_NodeWithValue(tree, sel_ptr), filepath,
-                        filename);
+      /* if the returned node is a file, then play it */
+      if (ptr->type == 'f') {
+        strcpy(sel_file, ptr->name);
+        break;
+        /* else if returned node is a dir, then enter it */
+      } else if (ptr->type == 'd') {
+        /* get the values of the children of the returned node and then
+         * updated the menu */
+        interface_ss_mp(ptr, filepath, filename);
         del_panel(panel);
         if (start_screen_deinit(menu) != 0) {
           logerror(__func__, "Error in called function start_screen_deinit");
@@ -93,7 +97,9 @@ int main(int argc, char **argv) {
   // NOTE: end of temp code
 
   /* search tree for matching list */
-  search_MusicList(tree, sel_file);
+  // NOTE: function that implements search file operation
+  //
+  //  search_MusicList(tree, sel_file);
 
   /* initalize sdl mixer */
   if (sdl_init() != 0) {

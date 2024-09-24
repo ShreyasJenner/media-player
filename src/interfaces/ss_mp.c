@@ -5,7 +5,6 @@
 #include "log.h"
 #include "stdheader.h"
 #include "structs.h"
-#include <string.h>
 
 /*
  * Function acts as an interface between the media player and the start screen
@@ -19,6 +18,7 @@ void interface_ss_mp(struct Node *node, char (*filepath)[FILE_NAME_SZ],
 
   /* Iterate through tree nodes and store in char array */
   i = 0;
+  // NOTE: debugging statement
   while (i < node->childcount) {
     strcpy(filepath[i], node->children[i]->name);
     // sprintf(filepath[i], "%d", i);

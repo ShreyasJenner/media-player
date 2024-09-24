@@ -8,7 +8,7 @@ int get_ChildCount(char *dirname);
 
 int store_FileDetails(char *dirname, struct Node *node, struct Tree *tree);
 
-int get_DirTree(struct Tree *tree, char *dirname);
+int create_DirTree(struct Tree *tree, char *dirname);
 
 void free_Tree(struct Node *node);
 

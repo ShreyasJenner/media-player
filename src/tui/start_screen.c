@@ -14,6 +14,7 @@
 #include "log.h"
 #include "stdheader.h"
 #include "structs.h"
+#include <stdio.h>
 
 /*
  * Function assigns a window, menu and items to a panel
@@ -114,6 +115,11 @@ const char *handle_keypress(MENU *menu, int key) {
     // return pointer to item description if enter key pressed
   case 10:
     sel = item_name(current_item(menu));
+    break;
+
+    // go up one directory if backspace key pressed
+  case 263:
+    sel = "..";
     break;
 
   default:
