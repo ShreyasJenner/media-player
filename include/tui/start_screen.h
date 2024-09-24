@@ -11,4 +11,6 @@ const char *handle_keypress(MENU *menu, int key);
 
 int start_screen_deinit(MENU *menu);
 
+char *start_menu_run(PANEL **panel, struct Tree *tree);
+
 #endif // !START_SCREEN_H

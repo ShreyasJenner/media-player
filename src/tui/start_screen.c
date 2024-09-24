@@ -8,13 +8,18 @@
  * on the key press
  * 3. start_screen_deinit -> deinitialize created menus, items and panel
  * windows
+ *
+ * Program Run:
+ * 1. start_screen_run -> runs the program in the above flow; is the only
+ * function that should be called by any external program
  */
 
 #include "tui/start_screen.h"
+#include "interfaces/ss_mp.h"
 #include "log.h"
 #include "stdheader.h"
 #include "structs.h"
-#include <stdio.h>
+#include "tree.h"
 
 /*
  * Function assigns a window, menu and items to a panel
@@ -59,9 +64,11 @@ MENU *start_screen_init(PANEL **panel, char (*filepath)[FILE_NAME_SZ],
   }
   items[len] = NULL;
 
+  /* allocate menu items, set menu window and create menu sub window with
+   * dimensions  */
   menu = new_menu(items);
   set_menu_win(menu, win);
-  set_menu_sub(menu, derwin(win, y - 4, x - 2, 1, 1));
+  set_menu_sub(menu, derwin(win, y - 3, x - 1, 1, 1));
   set_menu_mark(menu, "*");
 
   /* post menu */
@@ -179,6 +186,70 @@ int start_screen_deinit(MENU *menu) {
   return 0;
 }
 
+/* Function to run the start meuu program, and handle
+ * tasks such as creation of start menu, updation and deletion */
+char *start_menu_run(PANEL **panel, struct Tree *tree) {
+  /* Declaration */
+  char filepath[tree->filecount][FILE_NAME_SZ],
+      filename[tree->filecount][FILE_NAME_SZ];
+  struct Node *ptr;
+  char *sel_ptr;
+  int ch;
+  MENU *menu;
+
+  /* Initialization */
+
+  interface_ss_mp(&tree->root, filepath, filename);
+  menu = start_screen_init(panel, filepath, filename, tree->root.childcount);
+  update_panels();
+  doupdate();
+
+  /* loop to handle start screen item traversal */
+  ptr = &tree->root;
+  while ((ch = getch()) != 'q') {
+    sel_ptr = (char *)handle_keypress(menu, ch);
+    if (sel_ptr != NULL) {
+      if (!strcmp(sel_ptr, "..")) {
+        if (ptr->parent != NULL) {
+          ptr = ptr->parent;
+        }
+      } else {
+        ptr = search_NodeWithValue(*tree, sel_ptr);
+      }
+
+      /* if the returned node is a file, then return the name of the file */
+      if (ptr->type == 'f') {
+        return ptr->name;
+        /* else if returned node is a dir, then enter it */
+      } else if (ptr->type == 'd') {
+        /* get the values of the children of the returned node and then
+         * updated the menu */
+        interface_ss_mp(ptr, filepath, filename);
+        del_panel(*panel);
+        if (start_screen_deinit(menu) != 0) {
+          logerror(__func__, "Error in called function start_screen_deinit");
+          endwin();
+          exit(1);
+        }
+        menu = start_screen_init(panel, filepath, filename, ptr->childcount);
+        if (menu == NULL) {
+          logerror(__func__, "Error in called function start_screen_init");
+          endwin();
+          exit(1);
+        }
+      }
+    }
+
+    /* update the panels */
+    update_panels();
+    doupdate();
+  }
+  del_panel(*panel);
+  start_screen_deinit(menu);
+
+  return NULL;
+}
+
 /* Driver Code */
 // int main() {
 //   /* Declaration */
@@ -204,7 +275,7 @@ int start_screen_deinit(MENU *menu) {
 //   while ((ch = getch()) != 'q') {
 //     sel = handle_keypress(menu, ch);
 //     if (sel != NULL) {
-//       fprintf(stderr, "%s", sel);
+//       frintf(stderr, "%s", sel);
 //     }
 //     update_panels();
 //     doupdate();

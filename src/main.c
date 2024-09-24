@@ -24,77 +24,29 @@ int main(int argc, char **argv) {
   }
 
   /* Declaration */
-  int result;
-  char sel_file[FILE_NAME_SZ];
+  int result, ch;
+  char *sel_file;
   struct Tree tree;
+  PANEL *panels[3];
 
   /* initalize ncurses */
   tui_init();
 
   /* get dir tree */
+  // TODO: sort the music entries in the each directory, by track order
   result = create_DirTree(&tree, argv[1]);
   if (result != 0) {
     logerror(__func__, "Calling create_DirTree");
     return 0;
   }
 
-  // NOTE: temp code to run start screen
-  char filepath[tree.filecount + tree.dircount][FILE_NAME_SZ],
-      filename[tree.filecount + tree.dircount][FILE_NAME_SZ];
-  struct Node *ptr;
-  char *sel_ptr;
-  int ch;
-  PANEL *panel;
-  MENU *menu;
-
-  interface_ss_mp(&tree.root, filepath, filename);
-  menu = start_screen_init(&panel, filepath, filename, tree.root.childcount);
-  update_panels();
-  doupdate();
-
-  /* loop to handle start screen item traversal */
-  while ((ch = getch()) != 'q') {
-    sel_ptr = (char *)handle_keypress(menu, ch);
-    if (sel_ptr != NULL) {
-      if (!strcmp(sel_ptr, "..")) {
-        if (ptr->parent != NULL) {
-          ptr = ptr->parent;
-        }
-      } else {
-        ptr = search_NodeWithValue(tree, sel_ptr);
-      }
-
-      /* if the returned node is a file, then play it */
-      if (ptr->type == 'f') {
-        strcpy(sel_file, ptr->name);
-        break;
-        /* else if returned node is a dir, then enter it */
-      } else if (ptr->type == 'd') {
-        /* get the values of the children of the returned node and then
-         * updated the menu */
-        interface_ss_mp(ptr, filepath, filename);
-        del_panel(panel);
-        if (start_screen_deinit(menu) != 0) {
-          logerror(__func__, "Error in called function start_screen_deinit");
-          endwin();
-          exit(1);
-        }
-        menu = start_screen_init(&panel, filepath, filename, ptr->childcount);
-        if (menu == NULL) {
-          logerror(__func__, "Error in called function start_screen_init");
-          endwin();
-          exit(1);
-        }
-      }
-    }
-
-    /* update the panels */
-    update_panels();
-    doupdate();
-  }
-  del_panel(panel);
-  start_screen_deinit(menu);
-  // NOTE: end of temp code
+  /* run the start menu program */
+  sel_file = start_menu_run(&panels[0], &tree);
+  // BUG: screen does not get cleared after start menu is done runnig
+  // aritfacts from the menu are left behind
+  // NOTE: temporary code to resolve artifacts
+  wclear(stdscr);
+  // NOTE: temporary code to resolve artifacts
 
   /* search tree for matching list */
   // NOTE: function that implements search file operation
@@ -110,6 +62,11 @@ int main(int argc, char **argv) {
 
   /* load the music file */
   Mix_Music *music = load_music(sel_file);
+  if (music == NULL) {
+    logerror(__func__, "Error in called function load music");
+    endwin();
+    exit(1);
+  }
 
   // create a thread to detect key presses
   // thread_id = pthread_create(&thread_id, NULL, key_detect, &music);

@@ -5,8 +5,6 @@
 #include "log.h"
 #include "progress-bar/include/progress_bar.h"
 #include "stdheader.h"
-#include <SDL2/SDL_mixer.h>
-#include <curses.h>
 
 /* Function initialized sdl with options to play
  * certain music files
