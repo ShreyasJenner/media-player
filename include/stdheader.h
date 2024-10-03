@@ -1,6 +1,8 @@
-#ifndef STDHEADER_H
-#define STDHEADER_H
+#ifndef MEDIA_PLAYER_STDHEADER_H
+#define MEDIA_PLAYER_STDHEADER_H
 
+#include <FLAC/format.h>
+#include <FLAC/metadata.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include <dirent.h>
@@ -15,7 +17,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <time.h>
 #include <unistd.h>
 
-#endif
+#endif //! MEDIA_PLAYER_STDHEADER_H

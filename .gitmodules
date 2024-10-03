@@ -1,9 +1,6 @@
-[submodule "external/progress-bar"]
-	path = external/progress-bar
-	url = git@github.com:ShreyasJenner/progress-bar.git
 [submodule "id3reader"]
 	path = id3reader
 	url = git@github.com:ShreyasJenner/id3reader.git
-[submodule "external/id3reader"]
-	path = external/id3reader
-	url = git@github.com:ShreyasJenner/id3reader.git
+[submodule "sub-modules/audio-metadata-reader"]
+	path = sub-modules/audio-metadata-reader
+	url = git@github.com:ShreyasJenner/audio-metadata-reader.git

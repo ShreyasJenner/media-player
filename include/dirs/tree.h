@@ -1,8 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "dirs/structs.h"
 #include "stdheader.h"
-#include "structs.h"
 
 int get_ChildCount(char *dirname);
 

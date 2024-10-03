@@ -1,130 +1,60 @@
 /* Main Program file */
 
 /* header files */
-#include "interfaces/ss_mp.h"
-#include "log.h"
-#include "media-handling/sdl.h"
-#include "mp3_lut.h"
+// NOTE: global
 #include "stdheader.h"
-#include "structs.h"
-#include "tree.h"
+// NOTE:  local
+#include "log.h"
 #include "tui/init.h"
-#include "tui/search_list.h"
-#include "tui/start_screen.h"
 
-/* external header files */
-#include "id3reader/include/id3reader.h"
-#include "progress-bar/include/progress_bar.h"
+/* sub-module header files */
+// NOTE:  global
+#include "audio-metadata-reader/include/stdheader.h"
+// NOTE:  local
+#include "audio-metadata-reader/include/flac/flac_structs.h"
+#include "audio-metadata-reader/include/flac/read_flac_metadata.h"
 
 int main(int argc, char **argv) {
   /* check if file arg has been passed */
   if (argc < 2) {
-    logerror(__func__, "File argument not passed");
+    logerror(__FILE__, __LINE__, __func__, "File argument not passed");
     return 0;
   }
 
   /* Declaration */
-  int result, ch;
-  char *sel_file;
-  struct Tree tree;
-  PANEL *panels[3];
+  WINDOW **wins;
+  PANEL **panels;
 
-  /* initalize ncurses */
+  /* initialize curses screen */
   tui_init();
 
-  /* get dir tree */
-  // TODO: sort the music entries in the each directory, by track order
-  result = create_DirTree(&tree, argv[1]);
-  if (result != 0) {
-    logerror(__func__, "Calling create_DirTree");
-    return 0;
+  /* create windows and panels */
+  wins = create_windows();
+  panels = create_panels(wins);
+
+  /* update tui to show screen */
+  tui_update(wins);
+
+  // NOTE: temp code to check if flac metadata is working
+  FLACMetadata *metadata = get_FLACMetadata(argv[1]);
+  if (metadata == NULL) {
+    mvwprintw(wins[2], 1, 1, "%s\n", "Metadata failed baby");
+  } else {
+    mvwprintw(wins[2], 1, 1, "%s\n",
+              metadata->vorbis_comment->data.vorbis_comment.comments[0].entry);
   }
+  tui_update(wins);
+  // NOTE: temp code to check if flac metadata is working
 
-  /* run the start menu program */
-  sel_file = start_menu_run(&panels[0], &tree);
-  // BUG: screen does not get cleared after start menu is done runnig
-  // aritfacts from the menu are left behind
-  // NOTE: temporary code to resolve artifacts
-  wclear(stdscr);
-  // NOTE: temporary code to resolve artifacts
+  // NOTE: block code to view result
+  getch();
 
-  /* search tree for matching list */
-  // NOTE: function that implements search file operation
-  //
-  //  search_MusicList(tree, sel_file);
-
-  /* initalize sdl mixer */
-  if (sdl_init() != 0) {
-    logerror(__func__, "Error in function sdl_init");
-    endwin();
-    exit(1);
-  }
-
-  /* load the music file */
-  Mix_Music *music = load_music(sel_file);
-  if (music == NULL) {
-    logerror(__func__, "Error in called function load music");
-    endwin();
-    exit(1);
-  }
-
-  // create a thread to detect key presses
-  // thread_id = pthread_create(&thread_id, NULL, key_detect, &music);
-
-  // TODO: external thread should support key handling
-  int flag;
-  flag = 1;
-  // BUG: fix cursor flickering
-  // NOTE: temprary code to fix cursor flickering
-  curs_set(0);
-  // NOTE: temprary code to fix cursor flickering
-  /* Loop deals with playing, pausing, rewinding and quitting music player */
-  while (true) {
-    // music is over
-    if (!Mix_PlayingMusic())
-      break;
-
-    ch = getch();
-
-    flag = sdl_HandleKeypress(music, ch, flag);
-    if (flag == MEDIA_PLAYER_QUIT)
-      break;
-
-    /* Print the current playback position */
-    // mvprintw(0, 0, "%d\n", (int)Mix_GetMusicPosition(music));
-    //
-    //
-    // NOTE: progress bar to the right is not cleared if rewinding of music is
-    // done
-    // music position printed is not cleared; remnants are left if a smaller
-    // number is printed after a larger one
-    // BUG: fix progress_bar or media player to handle artifacts left behind
-    // when rewinding music
-    // NOTE: temporary code to handle bug
-    move(0, 0);
-    clrtoeol();
-    move(1, 0);
-    clrtoeol();
-    // NOTE: temporary code to handle bug
-    // TODO: modify progress_bar to show only the progress_bar and not print the
-    // data value passed to it
-    progress_bar((int)Mix_GetMusicPosition(music),
-                 (int)Mix_MusicDuration(music), 0);
-    wrefresh(stdscr);
-  }
-
-  // block program until quit is pressed
-  // pthread_join(thread_id, NULL);
-
-  /* Deinitialize sdl */
-  sdl_deinit(music);
-
-  /* close ncurses window */
-  endwin();
-
-  // NOTE: Temp code
-  free_Tree(&tree.root);
-  // NOTE: Temp code
+  /* clean up resources and log end of file */
+  destroy_panels(panels);
+  destroy_windows(wins);
+  clean_FLACMetadata(metadata);
+  tui_deinit();
+  logend();
 
   return 0;
 }
