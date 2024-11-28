@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "log/log.hpp"
+#include "media/header.hpp"
 #include "media/media.hpp"
-#include "media/play.hpp"
 
 /* Default constructor for media calls init */
 Media::Media() {
@@ -78,6 +78,8 @@ void Media::deinit() {
   // deinitalize sdl mixer
   Mix_Quit();
 }
+
+/* Function to fast-forward track */
 
 /* Function to get error value from object */
 int Media::getError() { return this->error; }

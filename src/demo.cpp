@@ -4,8 +4,8 @@
 #include <thread>
 
 #include "log/log.hpp"
+#include "media/header.hpp"
 #include "media/media.hpp"
-#include "media/play.hpp"
 
 int main(int argc, char **argv) {
   // check if argument has been passed

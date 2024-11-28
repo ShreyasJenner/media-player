@@ -1,8 +1,29 @@
 #ifndef MEDIA_H
 #define MEDIA_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_main.h>
-#include <SDL2/SDL_mixer.h>
+namespace MediaError {
+enum MediaError { NOERROR, WARN, ERROR };
+}
 
-#endif // !MEDIA_H
+class Media {
+private:
+  MediaError::MediaError error;
+
+public:
+  Media();
+
+  void init();
+
+  void play(char *track);
+
+  void pause();
+
+  void resume();
+
+  void deinit();
+
+  int getError();
+};
+
+#endif /* ifndef MEDIA _H                                                      \
+#define MEDIA_H */

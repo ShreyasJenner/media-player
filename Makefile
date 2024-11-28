@@ -2,7 +2,8 @@
 CXX=g++
 CXXFLAGS=-Wall -Wextra -Iinclude
 DEMOFLAGS=-Iinclude
-LDFLAGS=-lSDL2 -lSDL2_mixer
+LDFLAGS=-lSDL2 -lSDL2_mixer -lftxui-screen -lftxui-component \
+				-lftxui-dom
 
 # Project Structure
 SRC_DIR=src
