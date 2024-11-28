@@ -14,18 +14,24 @@ Media::Media() {
 void Media::init() {
   // allow playing of flac and mp3 files
   int flags = MIX_INIT_FLAC | MIX_INIT_MP3;
-  // TODO: add error checking and log error
+
+  // error checking
   if (Mix_Init(flags) != flags) {
-    this->error = MediaError::MediaError::ERROR;
+    this->error = MediaError::ERROR;
     logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
              "SDL Mixer Initialization");
     return;
   }
 
+  // error checking
   // TODO: get app metadata to set frequency and format
   // NOTE: experiment with chunk size to get best result
-  // TODO: add error checking and log errors
-  Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 2048);
+  if (Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 2048) != 0) {
+    this->error = MediaError::ERROR;
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "SDL Opening audio device failed");
+    return;
+  }
 }
 
 /* Function to play music file */
@@ -33,12 +39,23 @@ void Media::play(char *track) {
   Mix_Music *music;
 
   // load track
-  // TODO: add error checking and log erors
   music = Mix_LoadMUS(track);
 
+  // error checking
+  if (music == NULL) {
+    this->error = MediaError::ERROR;
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "Loading track failed");
+    return;
+  }
+
   // play track
-  // TODO: add error checking and log erors
-  Mix_PlayMusic(music, 0);
+  if (Mix_PlayMusic(music, 0) != 0) {
+    this->error = MediaError::ERROR;
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "Playing track failed");
+    return;
+  }
 }
 
 /* Function to pause track */

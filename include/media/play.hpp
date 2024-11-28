@@ -2,7 +2,7 @@
 #define PLAY_H
 
 namespace MediaError {
-enum MediaError { WARN, ERROR };
+enum MediaError { NOERROR, WARN, ERROR };
 }
 
 class Media {

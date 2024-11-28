@@ -15,21 +15,34 @@ int main(int argc, char **argv) {
   }
 
   // NOTE:media module demo
-  /*Media med;*/
-  /**/
-  /*std::thread t1(&Media::play, &med, argv[1]);*/
-  /*sleep(5);*/
-  /*med.pause();*/
-  /*printf("Pausing\n");*/
-  /*sleep(5);*/
-  /*med.resume();*/
-  /*printf("Resuming\n");*/
-  /*sleep(5);*/
-  /*med.deinit();*/
-  /*printf("Ending\n");*/
-  /**/
-  /*t1.join();*/
+  Media med;
+
+  if (med.getError() == MediaError::ERROR) {
+    return 1;
+  }
+
+  std::thread t1(&Media::play, &med, argv[1]);
+
+  sleep(2);
+  if (med.getError() == MediaError::ERROR) {
+    t1.join();
+    med.deinit();
+    return 1;
+  }
+
+  sleep(5);
+  med.pause();
+  printf("Pausing\n");
+  sleep(5);
+  med.resume();
+  printf("Resuming\n");
+  sleep(5);
+  med.deinit();
+  printf("Ending\n");
+
+  t1.join();
 
   // NOTE: logging module demo
-  logerror(__FILE__, __LINE__, __func__, LOGLEVEL::INFO, "Demo error message");
+  /*logerror(__FILE__, __LINE__, __func__, LOGLEVEL::INFO, "Demo error
+   * message");*/
 }
