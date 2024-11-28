@@ -1,5 +1,8 @@
-#include "media/play.hpp"
+#include <iostream>
+
+#include "log/log.hpp"
 #include "media/media.hpp"
+#include "media/play.hpp"
 
 /* Default constructor for media calls init */
 Media::Media() {
@@ -12,7 +15,12 @@ void Media::init() {
   // allow playing of flac and mp3 files
   int flags = MIX_INIT_FLAC | MIX_INIT_MP3;
   // TODO: add error checking and log error
-  Mix_Init(flags);
+  if (Mix_Init(flags) != flags) {
+    this->error = MediaError::MediaError::ERROR;
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "SDL Mixer Initialization");
+    return;
+  }
 
   // TODO: get app metadata to set frequency and format
   // NOTE: experiment with chunk size to get best result
@@ -53,3 +61,6 @@ void Media::deinit() {
   // deinitalize sdl mixer
   Mix_Quit();
 }
+
+/* Function to get error value from object */
+int Media::getError() { return this->error; }

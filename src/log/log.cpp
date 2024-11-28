@@ -11,8 +11,8 @@
  * func: function in which error occurred
  * msg: error message
  */
-int logerror(std::string file, int line, std::string func, enum LOGLEVEL level,
-             std::string msg) {
+int logerror(std::string file, int line, std::string func,
+             enum LOGLEVEL::LOGLEVEL level, std::string msg) {
   int fd;
   std::string stringtime(25, '\0');
   std::string logmsg(stringtime.length() + file.length() +
@@ -40,23 +40,23 @@ int logerror(std::string file, int line, std::string func, enum LOGLEVEL level,
 
   // create the string for the log level
   switch (level) {
-  case DEBUG:
+  case LOGLEVEL::DEBUG:
     loglevelstr = "DEBUG";
     break;
 
-  case INFO:
+  case LOGLEVEL::INFO:
     loglevelstr = "INFO";
     break;
 
-  case WARN:
+  case LOGLEVEL::WARN:
     loglevelstr = "WARN";
     break;
 
-  case ERROR:
+  case LOGLEVEL::ERROR:
     loglevelstr = "ERROR";
     break;
 
-  case CRITICAL:
+  case LOGLEVEL::CRITICAL:
     loglevelstr = "CRITICAL";
     break;
   }

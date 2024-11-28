@@ -14,11 +14,10 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  // create media object
+  // NOTE:media module demo
   /*Media med;*/
   /**/
   /*std::thread t1(&Media::play, &med, argv[1]);*/
-  /*// med.play(argv[1]);*/
   /*sleep(5);*/
   /*med.pause();*/
   /*printf("Pausing\n");*/
@@ -29,9 +28,8 @@ int main(int argc, char **argv) {
   /*med.deinit();*/
   /*printf("Ending\n");*/
   /**/
-  /*// wait for thread t1 to finish*/
   /*t1.join();*/
-  /**/
-  /*// testing logging*/
-  /*logerror(__FILE__, __LINE__, __func__, INFO, "Demo error message");*/
+
+  // NOTE: logging module demo
+  logerror(__FILE__, __LINE__, __func__, LOGLEVEL::INFO, "Demo error message");
 }
