@@ -1,9 +1,11 @@
 # compiler and flags
 CXX=g++
-CXXFLAGS=-Wall -Wextra -Iinclude
-DEMOFLAGS=-Iinclude
-LDFLAGS=-lSDL2 -lSDL2_mixer -lftxui-screen -lftxui-component \
-				-lftxui-dom
+CXXFLAGS=-Wall -Wextra -Iinclude -Iextern
+DEMOFLAGS=-Iinclude -Iextern/audio-metadata-reader/include
+LDFLAGS=-lSDL2 -lSDL2_mixer \
+				-lftxui-screen -lftxui-component -lftxui-dom \
+				-lFLAC
+STATICLD=extern/audio-metadata-reader/lib/metadata-reader.a
 
 # Project Structure
 SRC_DIR=src
@@ -24,7 +26,7 @@ build: $(TARGET)
 # rule to build final executable
 $(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(STATICLD) $(LDFLAGS)
 
 
 # rule to build object files
@@ -39,7 +41,7 @@ demo: $(DEMOTARGET)
 # rule to build final executable
 $(DEMOTARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(DEMOFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(DEMOFLAGS) -o $@ $^ $(STATICLD) $(LDFLAGS)
 
 
 # rule to build object files

@@ -6,6 +6,6 @@ private:
   int key;
 
 public:
-}
+};
 
 #endif // !KEY_EVENT_H

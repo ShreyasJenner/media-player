@@ -21,24 +21,21 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  std::thread t1(&Media::play, &med, argv[1]);
-
-  sleep(2);
+  med.openAudio(argv[1]);
   if (med.getError() == MediaError::ERROR) {
-    t1.join();
-    med.deinit();
     return 1;
   }
 
-  sleep(5);
-  med.pause();
-  printf("Pausing\n");
-  sleep(5);
-  med.resume();
-  printf("Resuming\n");
-  sleep(5);
+  std::thread t1(&Media::play, &med, argv[1]);
+
+  // wait for 1 second for the thread to start
+  sleep(1);
+
+  while (Mix_PlayingMusic()) {
+  }
+
+  med.freeMusic();
   med.deinit();
-  printf("Ending\n");
 
   t1.join();
 
