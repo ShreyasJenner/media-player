@@ -11,6 +11,7 @@ STATICLD=extern/audio-metadata-reader/lib/metadata-reader.a
 SRC_DIR=src
 OBJ_DIR=obj
 BIN_DIR=bin
+LOG_DIR=$(HOME)/.local/state/media-player/
 TARGET=$(BIN_DIR)/mediaplayer
 DEMOTARGET=$(BIN_DIR)/demo
 
@@ -21,7 +22,12 @@ OBJS=$(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
 
 # build target
-build: $(TARGET)
+build: $(LOG_BUILD) $(TARGET)
+
+# rule to create log directory
+$(LOG_BUILD) : $(LOG_DIR)
+	@mkdir -p $(LOG_DIR)
+	@echo "Directory '$(LOG_DIR)' created"
 
 # rule to build final executable
 $(TARGET): $(OBJS)
@@ -36,7 +42,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 
 # demo target
-demo: $(DEMOTARGET)
+demo: $(LOG_DIR) $(DEMOTARGET)
+
+# rule to create log directory
+$(LOG_DIR):
+	@mkdir -p $(LOG_DIR)
+	@echo "Directory '$(LOG_DIR)' created"
 
 # rule to build final executable
 $(DEMOTARGET): $(OBJS)
