@@ -3,7 +3,8 @@ CXX=g++
 CXXFLAGS=-Wall -Wextra -Iinclude -Iextern
 DEMOFLAGS=-Iinclude -Iextern/audio-metadata-reader/include
 LDFLAGS=-lSDL2 -lSDL2_mixer \
-				-lftxui-screen -lftxui-component -lftxui-dom \
+				-lftxui-component -lftxui-dom -lftxui-screen \
+				-Lextern/FTXUI/_deps/ftxui-build \
 				-lFLAC
 STATICLD=extern/audio-metadata-reader/lib/metadata-reader.a
 

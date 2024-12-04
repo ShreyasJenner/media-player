@@ -1,0 +1,117 @@
+#include "FileSystem/FileSystem.hpp"
+namespace fs = std::filesystem;
+
+/* Parameterized constructor that stores the path and creates the MediaTree */
+FileSystem::FileSystem(std::string path) {
+  this->mt = new MediaTree();
+  this->path = path;
+}
+
+/* Function to get Media Tree */
+MediaTree *FileSystem::getMediaTree() { return this->mt; }
+
+/* Function to get Path */
+std::string FileSystem::getPath() { return this->path; }
+
+/* Function to create media tree */
+void FileSystem::createMediaTree() {
+  std::queue<Node *> entries;
+  Node *itr;
+  Node *child;
+
+  // set MediaTree root details
+  itr = this->getMediaTree()->getRoot();
+  itr->data = this->getPath();
+  itr->track = false;
+  itr->sibling = NULL;
+
+  // push root node into queue
+  entries.push(itr);
+
+  // while the queue is not empty
+  while (!entries.empty()) {
+    // set iterator to point to first element in queue and remove it
+    itr = entries.front();
+    entries.pop();
+
+    // iterate through the path and add it to the queue
+    for (const auto &entry : fs::directory_iterator(itr->data)) {
+
+      // create a new node
+      Node *ptr = new Node;
+      ptr->data = entry.path();
+
+      // if first child for node has not been set
+      if (itr->child == NULL) {
+        // set iterator's child to first child pointer and set child to ptr
+        itr->child = ptr;
+        child = ptr;
+      } else {
+        // set the sibling for the child to the current pointer and update
+        // {child}
+        child->sibling = ptr;
+        child = ptr;
+      }
+
+      // a directory cannot be a track and should be stored into queue
+      if (entry.is_directory()) {
+        ptr->track = false;
+
+        // store only directory entries in queue
+        entries.push(ptr);
+      } else {
+        // a file is assumed to be a track and has no children
+        ptr->track = true;
+      }
+    }
+  }
+}
+
+/* Function to print the MediaTree in a format similar to the output from the
+ * linux command `tree` */
+void FileSystem::printMediaTree() {
+  if (this->getMediaTree() == NULL) {
+    std::cout << "Media Tree has not been created yet\n";
+    return;
+  }
+
+  std::string path;
+  int tab;
+
+  // set itr to MediaTree root, tab to 0 and create the tuple element
+  path = this->getMediaTree()->getRoot()->data;
+  tab = 0;
+
+  this->recursivePrint(path, tab);
+}
+
+/* Recursive helper function for `printMediaTree` to Recursively print the
+ * MediaTree with nice formatting */
+void FileSystem::recursivePrint(std::string path, int tab) {
+  // print the node details with `tab` spaces
+  std::cout << std::string(2 * tab, ' ');
+  std::cout << path << '\n';
+
+  // iterate through directory entries
+  if (fs::is_directory(path)) {
+
+    // iterate through the directory entries and recurse
+    for (const auto &entry : fs::directory_iterator(path)) {
+      if (fs::is_directory(entry.path())) {
+
+        // create a new node pointer and recurse
+        this->recursivePrint(entry.path(), tab + 1);
+      } else {
+        // print if not directory
+        std::cout << std::string(2 * (tab + 1), ' ');
+        std::cout << entry.path() << '\n';
+      }
+    }
+  }
+}
+
+/* Destructor to get rid of all allocated space using new */
+FileSystem::~FileSystem() {
+  // Destructor of MediaTree is called when deleting the object
+  delete this->getMediaTree();
+}
