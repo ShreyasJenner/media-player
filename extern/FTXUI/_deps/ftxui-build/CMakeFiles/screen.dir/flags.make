@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src -I/home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include
+CXX_INCLUDES = -I/home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src -I/home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include
 
 CXX_FLAGS = 
 

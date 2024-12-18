@@ -1,7 +1,7 @@
 _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/box_helper.cpp.o: \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/dom/box_helper.cpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/dom/box_helper.cpp \
  /usr/include/stdc-predef.h \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/dom/box_helper.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/dom/box_helper.hpp \
  /usr/include/c++/14.2.1/vector \
  /usr/include/c++/14.2.1/bits/requires_hosted.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++config.h \

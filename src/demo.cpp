@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "FileSystem/FileSystem.hpp"
+#include "FileSystem/TrieDS.hpp"
 #include "key_event/key_event.hpp"
 #include "log/log.hpp"
 #include "media/header.hpp"
@@ -15,10 +16,10 @@ extern "C" {
 
 int main(int argc, char **argv) {
   // check if argument has been passed
-  if (argc < 2) {
-    printf("Arguments not passed\n");
-    return 1;
-  }
+  /*if (argc < 2) {*/
+  /*  printf("Arguments not passed\n");*/
+  /*  return 1;*/
+  /*}*/
 
   // NOTE:media module demo
   /*Media med;*/
@@ -53,8 +54,17 @@ int main(int argc, char **argv) {
   FileSystem fs("/media");
 
   fs.createMediaTree();
+  fs.createTrie();
 
-  fs.printMediaTree();
+  /*std::vector<std::string> temp = fs.getTrie()->searchWord("Mas");*/
+  /*for (std::string word : temp) {*/
+  /*  std::cout << word << "\n";*/
+  /*}*/
+
+  std::vector<std::string *> temp = fs.getMediaTree()->getStringAddrs();
+  for (std::string *word_ptr : temp) {
+    std::cout << *word_ptr << '\n';
+  }
 
   return 0;
 }

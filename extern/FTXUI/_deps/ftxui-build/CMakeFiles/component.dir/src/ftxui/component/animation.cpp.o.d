@@ -1,5 +1,5 @@
 _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o: \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/component/animation.cpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/component/animation.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/14.2.1/cmath \
  /usr/include/c++/14.2.1/bits/requires_hosted.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
@@ -76,7 +76,7 @@ _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o: 
  /usr/include/c++/14.2.1/utility \
  /usr/include/c++/14.2.1/bits/stl_relops.h \
  /usr/include/c++/14.2.1/initializer_list \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/component/animation.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/component/animation.hpp \
  /usr/include/c++/14.2.1/chrono /usr/include/c++/14.2.1/bits/chrono.h \
  /usr/include/c++/14.2.1/ctime /usr/include/time.h \
  /usr/include/bits/time.h /usr/include/bits/timex.h \
@@ -118,8 +118,8 @@ _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o: 
  /usr/include/c++/14.2.1/bits/stl_bvector.h \
  /usr/include/c++/14.2.1/bits/vector.tcc /usr/include/c++/14.2.1/array \
  /usr/include/c++/14.2.1/compare \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/component/event.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/component/mouse.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/component/event.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/component/mouse.hpp \
  /usr/include/c++/14.2.1/string /usr/include/c++/14.2.1/bits/stringfwd.h \
  /usr/include/c++/14.2.1/bits/char_traits.h \
  /usr/include/c++/14.2.1/bits/postypes.h /usr/include/c++/14.2.1/cwchar \

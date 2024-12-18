@@ -8,10 +8,12 @@
 #include <tuple>
 
 #include "FileSystem/MediaTree.hpp"
+#include "FileSystem/TrieDS.hpp"
 
 class FileSystem {
 private:
   MediaTree *mt = NULL;
+  Trie *trie = NULL;
   std::string path;
 
   void recursivePrint(std::string path, int tab);
@@ -21,9 +23,13 @@ public:
 
   std::string getPath();
 
+  Trie *getTrie();
+
   MediaTree *getMediaTree();
 
   void createMediaTree();
+
+  void createTrie();
 
   void printMediaTree();
 

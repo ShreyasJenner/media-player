@@ -1,5 +1,5 @@
 _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o: \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/dom/composite_decorator.cpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/dom/composite_decorator.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/14.2.1/utility \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -16,7 +16,7 @@ _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o: \
  /usr/include/c++/14.2.1/bits/move.h \
  /usr/include/c++/14.2.1/bits/utility.h \
  /usr/include/c++/14.2.1/initializer_list \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/elements.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/elements.hpp \
  /usr/include/c++/14.2.1/functional \
  /usr/include/c++/14.2.1/bits/stl_function.h \
  /usr/include/c++/14.2.1/backward/binders.h /usr/include/c++/14.2.1/tuple \
@@ -125,7 +125,7 @@ _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o: \
  /usr/include/c++/14.2.1/backward/auto_ptr.h \
  /usr/include/c++/14.2.1/pstl/glue_memory_defs.h \
  /usr/include/c++/14.2.1/pstl/execution_defs.h \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/canvas.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/canvas.hpp \
  /usr/include/c++/14.2.1/string \
  /usr/include/c++/14.2.1/bits/char_traits.h \
  /usr/include/c++/14.2.1/bits/localefwd.h \
@@ -156,21 +156,21 @@ _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o: \
  /usr/include/bits/types/error_t.h \
  /usr/include/c++/14.2.1/bits/charconv.h \
  /usr/include/c++/14.2.1/bits/basic_string.tcc \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/color.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/color.hpp \
  /usr/include/c++/14.2.1/cstdint \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/screen.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/box.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/terminal.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/direction.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/flexbox_config.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/linear_gradient.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/screen.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/box.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/terminal.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/direction.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/flexbox_config.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/linear_gradient.hpp \
  /usr/include/c++/14.2.1/optional \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/node.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/requirement.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/util/ref.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/string.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/deprecated.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/node.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/requirement.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/util/ref.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/string.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/deprecated.hpp \
  /usr/include/c++/14.2.1/variant \
  /usr/include/c++/14.2.1/bits/parse_numbers.h \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/take_any_args.hpp \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/dom/deprecated.hpp
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/take_any_args.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/dom/deprecated.hpp

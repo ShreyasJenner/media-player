@@ -1,7 +1,7 @@
 _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o: \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/screen/string.cpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/screen/string.cpp \
  /usr/include/stdc-predef.h \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/string.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/string.hpp \
  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h \
  /usr/include/c++/14.2.1/cstdint \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
@@ -111,6 +111,6 @@ _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o: \
  /usr/include/c++/14.2.1/bits/stl_vector.h \
  /usr/include/c++/14.2.1/bits/stl_bvector.h \
  /usr/include/c++/14.2.1/bits/vector.tcc \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/include/ftxui/screen/deprecated.hpp \
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/include/ftxui/screen/deprecated.hpp \
  /usr/include/c++/14.2.1/array /usr/include/c++/14.2.1/compare \
- /home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/_deps/ftxui-src/src/ftxui/screen/string_internal.hpp
+ /home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/_deps/ftxui-src/src/ftxui/screen/string_internal.hpp

@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "/home/ouroboros/dev/projects/owned/media-player/CMakeLists.txt"
-  "CMakeFiles/3.31.1/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.1/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.31.1/CMakeSystem.cmake"
+  "CMakeFiles/3.31.2/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeSystem.cmake"
   "_deps/ftxui-src/CMakeLists.txt"
   "_deps/ftxui-src/cmake/ftxui-config.cmake.in"
   "_deps/ftxui-src/cmake/ftxui_benchmark.cmake"
@@ -160,11 +160,11 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.31.1/CMakeSystem.cmake"
-  "CMakeFiles/3.31.1/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.1/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.31.1/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.1/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeSystem.cmake"
+  "CMakeFiles/3.31.2/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.2/CMakeCXXCompiler.cmake"
   "_deps/ftxui-subbuild/CMakeLists.txt"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "_deps/ftxui-build/cmake/ftxui-config.cmake"

@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 set(CMAKE_RELATIVE_PATH_TOP_SOURCE "/home/ouroboros/dev/projects/owned/media-player")
-set(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/ouroboros/dev/projects/owned/media-player/extern/FXTUI")
+set(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/ouroboros/dev/projects/owned/media-player/extern/FTXUI")
 
 # Force unix paths in dependencies.
 set(CMAKE_FORCE_UNIX_PATHS 1)

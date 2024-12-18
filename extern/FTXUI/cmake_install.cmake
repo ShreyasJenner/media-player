@@ -50,7 +50,7 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/install_local_manifest.txt"
+  file(WRITE "/home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -66,6 +66,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/home/ouroboros/dev/projects/owned/media-player/extern/FXTUI/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/home/ouroboros/dev/projects/owned/media-player/extern/FTXUI/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
