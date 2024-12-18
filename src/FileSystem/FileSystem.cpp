@@ -129,49 +129,6 @@ void FileSystem::createTrie(int method) {
   }
 }
 
-/* Function to print the MediaTree in a format similar to the output from the
- * linux command `tree` */
-void FileSystem::printMediaTree() {
-  if (this->getMediaTree() == nullptr) {
-    std::cout << "Media Tree has not been created yet\n";
-    return;
-  }
-
-  std::string path;
-  int tab;
-
-  // set itr to MediaTree root, tab to 0 and create the tuple element
-  path = this->getMediaTree()->getRoot()->data;
-  tab = 0;
-
-  this->recursivePrint(path, tab);
-}
-
-/* Recursive helper function for `printMediaTree` to Recursively print the
- * MediaTree with nice formatting */
-void FileSystem::recursivePrint(std::string path, int tab) {
-  // print the node details with `tab` spaces
-  std::cout << std::string(2 * tab, ' ');
-  std::cout << path << '\n';
-
-  // iterate through directory entries
-  if (fs::is_directory(path)) {
-
-    // iterate through the directory entries and recurse
-    for (const auto &entry : fs::directory_iterator(path)) {
-      if (fs::is_directory(entry.path())) {
-
-        // create a new node pointer and recurse
-        this->recursivePrint(entry.path(), tab + 1);
-      } else {
-        // print if not directory
-        std::cout << std::string(2 * (tab + 1), ' ');
-        std::cout << entry.path() << '\n';
-      }
-    }
-  }
-}
-
 /* Destructor to get rid of all allocated space using new */
 FileSystem::~FileSystem() {
   // Destructor of MediaTree is called when deleting the object

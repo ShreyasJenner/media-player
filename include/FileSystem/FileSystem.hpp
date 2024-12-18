@@ -16,8 +16,6 @@ private:
   Trie *trie = NULL;
   std::string path;
 
-  void recursivePrint(std::string path, int tab);
-
 public:
   FileSystem(std::string path);
 
@@ -30,8 +28,6 @@ public:
   void createMediaTree();
 
   void createTrie(int method = 1);
-
-  void printMediaTree();
 
   ~FileSystem();
 };

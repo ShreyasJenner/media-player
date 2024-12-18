@@ -21,6 +21,7 @@ class MediaTree {
 private:
   Node *root = nullptr;
   int size = 1;
+  void helperDisplayMediaTree(Node *ptr, int tab);
 
 public:
   MediaTree();
@@ -33,7 +34,7 @@ public:
 
   Node *getRoot();
 
-  void traverseTree();
+  void displayMediaTree();
 
   ~MediaTree();
 };

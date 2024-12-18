@@ -48,6 +48,51 @@ std::vector<std::string *> MediaTree::getStringAddrs() {
 /* Function to return pointer to media tree root node */
 Node *MediaTree::getRoot() { return this->root; }
 
+/* Function to print media tree with nice formatting */
+void MediaTree::displayMediaTree() {
+  Node *itr;
+  int tab;
+
+  // get root node of media tree and set tab
+  itr = this->getRoot();
+  tab = 0;
+
+  // call helper function
+  helperDisplayMediaTree(itr, tab);
+}
+
+/*
+ * Helper function for displayMediaTree
+ * Assumes first child - next sibling representation for tree
+ */
+void MediaTree::helperDisplayMediaTree(Node *ptr, int tab) {
+  // print out twice tabs data
+  std::cout << std::string(2 * tab, ' ');
+  std::cout << ptr->data << '\n';
+
+  // if is a track, then print all sibling tracks
+  if (!ptr->track) {
+    // set pointer to its child
+    if (ptr->child != nullptr)
+      helperDisplayMediaTree(ptr->child, tab + 1);
+
+    // recurse siblings child
+    while (ptr->sibling != nullptr && ptr->sibling->child != nullptr) {
+      std::cout << std::string(2 * tab, ' ');
+      std::cout << ptr->sibling->data << '\n';
+      helperDisplayMediaTree(ptr->sibling->child, tab + 1);
+      ptr = ptr->sibling;
+    }
+  } else {
+    // print siblings
+    while (ptr->sibling != nullptr) {
+      std::cout << std::string(2 * tab, ' ');
+      std::cout << ptr->sibling->data << '\n';
+      ptr = ptr->sibling;
+    }
+  }
+}
+
 /* Destructor to get rid of all space allocated with new */
 MediaTree::~MediaTree() {
   Node *itr, *child;

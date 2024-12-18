@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   /*  std::cout << word << "\n";*/
   /*}*/
 
-  fs.getTrie()->displayTrie(fs.getTrie()->getRoot());
+  fs.getMediaTree()->displayMediaTree();
 
   return 0;
 }
