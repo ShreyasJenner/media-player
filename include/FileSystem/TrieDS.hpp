@@ -26,6 +26,7 @@ public:
   TrieNode *children[96];
 
   std::vector<std::string> words;
+  std::vector<std::string *> word_ptrs;
 
   TrieNode();
 };
@@ -34,10 +35,20 @@ class Trie {
 private:
   TrieNode *root;
 
+  /*
+   * method:1 => pointers to strings are stored in trie
+   * method: otherwise => strings are stored in trie
+   */
+  int method;
+
 public:
   Trie();
 
   TrieNode *getRoot();
+
+  void setMethod(int method);
+
+  void insertWord(std::string *word, std::string suffix);
 
   void insertWord(std::string word, std::string suffix);
 

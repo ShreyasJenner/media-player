@@ -78,29 +78,52 @@ void FileSystem::createMediaTree() {
   }
 }
 
-/* Function to create trie */
-void FileSystem::createTrie() {
-  std::queue<std::string> entries;
-  std::string itr;
+/*
+ * Function to create trie
+ * method: 1 = use insertWord(std::string *, std::string)
+ * method: otherwise = use insertWord(std::string, std::string)
+ * Method 1 saves on space and is used by default
+ */
+void FileSystem::createTrie(int method) {
+  // store pointers to strings in the trie
+  if (method == 1) {
+    // set the method private variable in trie
+    this->getTrie()->setMethod(method);
 
-  // push root node into queue
-  entries.push(this->getPath());
+    // get a vector of pointers to string in the media tree
+    MediaTree *mt = this->getMediaTree();
+    std::vector<std::string *> word_list_ptr = mt->getStringAddrs();
 
-  // while the queue is not empty
-  while (!entries.empty()) {
-    // set iterator to point to first element in queue and remove it
-    itr = entries.front();
-    entries.pop();
+    // iterate through vector and construct trie
+    for (std::string *word_ptr : word_list_ptr) {
+      this->getTrie()->insertWord(word_ptr, *word_ptr);
+    }
 
-    // iterate through the path and add it to the queue
-    for (const auto &entry : fs::directory_iterator(itr)) {
+  } else {
+    this->getTrie()->setMethod(method);
 
-      // add the current entry to the trie
-      this->getTrie()->insertWord(entry.path(), entry.path());
+    std::queue<std::string> entries;
+    std::string itr;
 
-      // store only directory entries in queue
-      if (entry.is_directory()) {
-        entries.push(entry.path());
+    // push root node into queue
+    entries.push(this->getPath());
+
+    // while the queue is not empty
+    while (!entries.empty()) {
+      // set iterator to point to first element in queue and remove it
+      itr = entries.front();
+      entries.pop();
+
+      // iterate through the path and add it to the queue
+      for (const auto &entry : fs::directory_iterator(itr)) {
+
+        // add the current entry to the trie
+        this->getTrie()->insertWord(entry.path(), entry.path());
+
+        // store only directory entries in queue
+        if (entry.is_directory()) {
+          entries.push(entry.path());
+        }
       }
     }
   }

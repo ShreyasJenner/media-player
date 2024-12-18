@@ -61,10 +61,7 @@ int main(int argc, char **argv) {
   /*  std::cout << word << "\n";*/
   /*}*/
 
-  std::vector<std::string *> temp = fs.getMediaTree()->getStringAddrs();
-  for (std::string *word_ptr : temp) {
-    std::cout << *word_ptr << '\n';
-  }
+  fs.getTrie()->displayTrie(fs.getTrie()->getRoot());
 
   return 0;
 }

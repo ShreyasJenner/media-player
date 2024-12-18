@@ -29,7 +29,7 @@ public:
 
   void createMediaTree();
 
-  void createTrie();
+  void createTrie(int method = 1);
 
   void printMediaTree();
 

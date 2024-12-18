@@ -18,6 +18,60 @@ Trie::Trie() { this->root = new TrieNode(); }
 /* Function to return pointer to root node */
 TrieNode *Trie::getRoot() { return this->root; }
 
+/* Function to set method variable in trie */
+void Trie::setMethod(int method) { this->method = method; }
+
+/*
+ * Function to insert a word into the Trie
+ * This function stores pointers to words in the media tree to save on space
+ * It must be called after the creation of the media tree
+ */
+void Trie::insertWord(std::string *word, std::string suffix) {
+  // if suffix is empty, then exit function
+  if (suffix == "") {
+    return;
+  }
+
+  TrieNode *itr;
+  int idx;
+
+  // set iterator to root of trie
+  itr = this->root;
+
+  // iterate through characters of string
+  for (idx = 0; idx < suffix.length(); idx++) {
+    int char_idx = suffix[idx] - UNICODE_OFFSET;
+
+    // NOTE: korean characters occasionally take on a value less that that of
+    // UNICODE_OFFSET.
+    // The first if condition has been temporarily added to handle that
+    //  TODO: add support for unicode characters of other langueges such as
+    //  japanese, korean, chinese etc
+    //  Currently does not support non-english characters
+    if (char_idx < 0 || char_idx >= 96) {
+      return;
+    }
+
+    // TODO: convert alphabets to lower case; handle special symbols such as $,
+    // @ etc...
+    //  if character index points to nullptr, create a new TrieNode
+    if (itr->children[char_idx] == nullptr) {
+      itr->children[char_idx] = new TrieNode();
+    }
+
+    // move iterator to child node
+    itr = itr->children[char_idx];
+  }
+
+  // if word end has been reached, set endofword to true and store the word in
+  // the corresponding node
+  itr->endofword = true;
+  itr->word_ptrs.push_back(word);
+
+  // call the function recursively on the next suffix of the word
+  this->insertWord(word, suffix.substr(1, suffix.length() - 1));
+}
+
 /* Function to insert a word into the Trie */
 void Trie::insertWord(std::string word, std::string suffix) {
   // if suffix is empty, then exit function
@@ -149,8 +203,15 @@ void Trie::displayTrie(TrieNode *itr) {
   }
 
   if (itr->endofword == true) {
-    for (std::string word : itr->words) {
-      std::cout << word << '\n';
+    // if method is 1 use pointers to string vector
+    if (method == 1) {
+      for (std::string *word_ptr : itr->word_ptrs) {
+        std::cout << *word_ptr << '\n';
+      }
+    } else {
+      for (std::string word : itr->words) {
+        std::cout << word << '\n';
+      }
     }
   }
 }
