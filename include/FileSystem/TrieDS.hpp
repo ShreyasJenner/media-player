@@ -29,6 +29,8 @@ public:
 
   std::vector<std::string *> word_ptrs;
 
+  // NOTE: TrieNodeType only has meaning when endofword is marked true
+  //  Otherwise, it is initialied to NONE in the constructor
   TrieNodeType type;
 
   TrieNode();

@@ -79,7 +79,7 @@ void FileSystem::createMediaTree() {
 }
 
 /* Function to create trie */
-void FileSystem::createTrie(int method) {
+void FileSystem::createTrie() {
 
   // get a vector of pointers to string in the media tree
   MediaTree *mt = this->getMediaTree();

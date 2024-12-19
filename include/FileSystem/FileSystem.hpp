@@ -44,7 +44,7 @@ private:
   MediaTree *mt = NULL;
   Trie *trie = NULL;
   std::string path;
-  int mode;
+  FileSystemMode mode;
 
 public:
   FileSystem(std::string path);
@@ -60,7 +60,7 @@ public:
   // NOTE: method = 1 => use string pointers
   //  otherwise => use strings
   //  Read comments above function for further details
-  void createTrie(int method = 1);
+  void createTrie();
 
   ~FileSystem();
 };

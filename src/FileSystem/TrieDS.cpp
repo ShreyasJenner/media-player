@@ -62,8 +62,10 @@ void Trie::insertWord(std::string *word, std::string suffix) {
     itr = itr->children[char_idx];
   }
 
-  // if word end has been reached, set endofword to true and store the word in
-  // the corresponding node
+  // if word end has been reached, set endofword to true, store the word ptr in
+  // the corresponding node and mark TrieNodeType
+  // TODO: modify the function header to pass a TrieNodeType parameter and set
+  // it here
   itr->endofword = true;
   itr->word_ptrs.push_back(word);
 
