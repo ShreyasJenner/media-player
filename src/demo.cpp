@@ -51,12 +51,14 @@ int main(int argc, char **argv) {
    * message");*/
 
   // NOTE: file system
-  FileSystem fs("/media");
+  FileSystem fs("/media", FORMATTED_DIR_STRUCTURE);
 
   fs.createMediaTree();
   fs.createTrie();
 
-  std::vector<std::string *> temp = fs.getTrie()->searchWord("Mas");
+  std::vector<std::string *> temp = fs.getMediaTree()->getArtistStringPtrs();
+
+  // std::vector<std::string *> temp = fs.getTrie()->searchWord("Mas");
   for (std::string *word : temp) {
     std::cout << *word << "\n";
   }

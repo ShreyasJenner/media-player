@@ -11,7 +11,7 @@ TrieNode::TrieNode() {
   }
 
   // set node type to NONE
-  this->type = TRIE_NONE;
+  this->type = NODE_NONE;
 }
 
 /* Default Constructor to initialize TrieNode */

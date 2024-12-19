@@ -1,6 +1,7 @@
 #ifndef TRIE_DS_HPP
 #define TRIE_DS_HPP
 
+#include "FileSystem/FileSystemEnums.hpp"
 #include <iostream>
 #include <queue>
 #include <string>
@@ -8,8 +9,6 @@
 
 #define CHILDREN_COUNT 96
 #define UNICODE_OFFSET 32
-
-enum TrieNodeType { TRIE_NONE, TRIE_ARTIST, TRIE_ALBUM, TRIE_TRACK };
 
 class TrieNode {
 public:
@@ -29,9 +28,8 @@ public:
 
   std::vector<std::string *> word_ptrs;
 
-  // NOTE: TrieNodeType only has meaning when endofword is marked true
-  //  Otherwise, it is initialied to NONE in the constructor
-  TrieNodeType type;
+  // NOTE: initialized to NODE_NONE in the constructor
+  NodeType type;
 
   TrieNode();
 };
