@@ -43,9 +43,15 @@ public:
 
   TrieNode *getRoot();
 
-  void insertWord(std::string *word, std::string suffix);
+  void insertWord(std::string *word, std::string suffix, NodeType type);
 
-  std::vector<std::string *> searchWord(std::string word);
+  std::vector<std::tuple<std::string *, NodeType>> searchWord(std::string word);
+
+  std::vector<std::string *> searchArtist(std::string word);
+
+  std::vector<std::string *> searchAlbum(std::string word);
+
+  std::vector<std::string *> searchTrack(std::string word);
 
   void deleteWord(std::string word);
 

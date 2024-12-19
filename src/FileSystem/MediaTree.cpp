@@ -12,9 +12,9 @@ void MediaTree::incrementSize() { this->size++; }
 /* Function to get size of media tree */
 int MediaTree::getSize() { return this->size; }
 
-/* Function to get vector of pointers to all strings in the media tree */
-std::vector<std::string *> MediaTree::getAllStringPtrs() {
-  std::vector<std::string *> word_ptr_list;
+/* Function to get vector of pointers to all nodes in the media tree */
+std::vector<Node *> MediaTree::getAllPtrs() {
+  std::vector<Node *> node_ptr_list;
   std::queue<Node *> node_ptr_queue;
 
   Node *itr, *ptr;
@@ -23,7 +23,7 @@ std::vector<std::string *> MediaTree::getAllStringPtrs() {
   itr = this->getRoot();
   node_ptr_queue.push(itr);
 
-  // store all nodes into queue and get string data from them
+  // store all nodes into queue and store them into list
   while (!node_ptr_queue.empty()) {
     // pop front of queue
     itr = node_ptr_queue.front();
@@ -41,16 +41,16 @@ std::vector<std::string *> MediaTree::getAllStringPtrs() {
       node_ptr_queue.push(itr->child);
     }
 
-    // store node string address into vector
-    word_ptr_list.push_back(&itr->filename);
+    // store node ptrs into vector
+    node_ptr_list.push_back(itr);
   }
 
-  return word_ptr_list;
+  return node_ptr_list;
 }
 
-/* Function to get string pointers to all nodes marked as album */
-std::vector<std::string *> MediaTree::getAlbumStringPtrs() {
-  std::vector<std::string *> album_ptr_list;
+/* Function to get node pointers to all nodes marked as album */
+std::vector<Node *> MediaTree::getAlbumPtrs() {
+  std::vector<Node *> album_ptr_list;
   std::queue<Node *> node_ptr_queue;
 
   Node *itr, *ptr;
@@ -59,7 +59,7 @@ std::vector<std::string *> MediaTree::getAlbumStringPtrs() {
   itr = this->getRoot();
   node_ptr_queue.push(itr);
 
-  // store all nodes into queue and get string data from them
+  // store all nodes into queue and store them into list
   while (!node_ptr_queue.empty()) {
     // pop front of queue
     itr = node_ptr_queue.front();
@@ -77,17 +77,17 @@ std::vector<std::string *> MediaTree::getAlbumStringPtrs() {
       node_ptr_queue.push(itr->child);
     }
 
-    // store node string address into vector
+    // store album node ptr into vector
     if (itr->type == NODE_ALBUM)
-      album_ptr_list.push_back(&itr->filename);
+      album_ptr_list.push_back(itr);
   }
 
   return album_ptr_list;
 }
 
 /* Function to get string pointers to all nodes marked as artist */
-std::vector<std::string *> MediaTree::getArtistStringPtrs() {
-  std::vector<std::string *> artist_ptr_list;
+std::vector<Node *> MediaTree::getArtistPtrs() {
+  std::vector<Node *> artist_ptr_list;
   std::queue<Node *> node_ptr_queue;
 
   Node *itr, *ptr;
@@ -96,7 +96,7 @@ std::vector<std::string *> MediaTree::getArtistStringPtrs() {
   itr = this->getRoot();
   node_ptr_queue.push(itr);
 
-  // store all nodes into queue and get string data from them
+  // store all nodes into queue and push them into list
   while (!node_ptr_queue.empty()) {
     // pop front of queue
     itr = node_ptr_queue.front();
@@ -114,17 +114,17 @@ std::vector<std::string *> MediaTree::getArtistStringPtrs() {
       node_ptr_queue.push(itr->child);
     }
 
-    // store node string address into vector
+    // store artist node ptr into vector
     if (itr->type == NODE_ARTIST)
-      artist_ptr_list.push_back(&itr->filename);
+      artist_ptr_list.push_back(itr);
   }
 
   return artist_ptr_list;
 }
 
-/* Function to get string pointers to all nodes marked as tracks */
-std::vector<std::string *> MediaTree::getTrackStringPtrs() {
-  std::vector<std::string *> track_ptr_list;
+/* Function to get node pointers to all nodes marked as tracks */
+std::vector<Node *> MediaTree::getTrackPtrs() {
+  std::vector<Node *> track_ptr_list;
   std::queue<Node *> node_ptr_queue;
 
   Node *itr, *ptr;
@@ -133,7 +133,7 @@ std::vector<std::string *> MediaTree::getTrackStringPtrs() {
   itr = this->getRoot();
   node_ptr_queue.push(itr);
 
-  // store all nodes into queue and get string data from them
+  // store all nodes into queue and push them into list
   while (!node_ptr_queue.empty()) {
     // pop front of queue
     itr = node_ptr_queue.front();
@@ -151,9 +151,9 @@ std::vector<std::string *> MediaTree::getTrackStringPtrs() {
       node_ptr_queue.push(itr->child);
     }
 
-    // store node string address into vector
+    // store track node address into vector
     if (itr->type == NODE_TRACK)
-      track_ptr_list.push_back(&itr->filename);
+      track_ptr_list.push_back(itr);
   }
 
   return track_ptr_list;

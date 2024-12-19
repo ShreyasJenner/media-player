@@ -52,7 +52,9 @@ void FileSystem::createMediaTree() {
           std::cout << "Skipping symlink: " << entry.path() << '\n';
           continue;
         } else if (entry.path().filename().string()[0] == '.') {
-          std::cout << "Skipping " << entry.path().filename().string() << '\n';
+          // NOTE: use below line for debugging
+          //  std::cout << "Skipping " << entry.path().filename().string() <<
+          //  '\n';
           continue;
         }
 
@@ -100,12 +102,12 @@ void FileSystem::createTrie() {
   if (this->mode == FORMATTED_DIR_STRUCTURE) {
     // get a vector of pointers to string in the media tree
     MediaTree *mt = this->getMediaTree();
-    std::vector<std::string *> word_list_ptr = mt->getAllStringPtrs();
+    std::vector<Node *> word_list_ptr = mt->getAllPtrs();
 
     // iterate through vector and construct trie
-    for (std::string *word_ptr : word_list_ptr) {
+    for (Node *node : word_list_ptr) {
       // store pointers to strings in the trie
-      this->getTrie()->insertWord(word_ptr, *word_ptr);
+      this->getTrie()->insertWord(&node->filename, node->filename, node->type);
     }
   } else {
     std::cout << "Mode not yet supported\n";

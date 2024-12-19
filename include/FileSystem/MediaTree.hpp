@@ -33,13 +33,13 @@ public:
 
   int getSize();
 
-  std::vector<std::string *> getAllStringPtrs();
+  std::vector<Node *> getAllPtrs();
 
-  std::vector<std::string *> getAlbumStringPtrs();
+  std::vector<Node *> getAlbumPtrs();
 
-  std::vector<std::string *> getArtistStringPtrs();
+  std::vector<Node *> getArtistPtrs();
 
-  std::vector<std::string *> getTrackStringPtrs();
+  std::vector<Node *> getTrackPtrs();
 
   Node *getRoot();
 
