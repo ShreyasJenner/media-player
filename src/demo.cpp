@@ -56,12 +56,12 @@ int main(int argc, char **argv) {
   fs.createMediaTree();
   fs.createTrie();
 
-  /*std::vector<std::string> temp = fs.getTrie()->searchWord("Mas");*/
-  /*for (std::string word : temp) {*/
-  /*  std::cout << word << "\n";*/
-  /*}*/
+  std::vector<std::string *> temp = fs.getTrie()->searchWord("Mas");
+  for (std::string *word : temp) {
+    std::cout << *word << "\n";
+  }
 
-  fs.getMediaTree()->displayMediaTree();
+  // fs.getMediaTree()->displayMediaTree();
 
   return 0;
 }

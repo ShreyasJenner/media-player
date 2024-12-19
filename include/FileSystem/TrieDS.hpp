@@ -9,6 +9,8 @@
 #define CHILDREN_COUNT 96
 #define UNICODE_OFFSET 32
 
+enum TrieNodeType { TRIE_NONE, TRIE_ARTIST, TRIE_ALBUM, TRIE_TRACK };
+
 class TrieNode {
 public:
   bool endofword;
@@ -25,8 +27,9 @@ public:
   // special characters and don't need to be represented in the array
   TrieNode *children[96];
 
-  std::vector<std::string> words;
   std::vector<std::string *> word_ptrs;
+
+  TrieNodeType type;
 
   TrieNode();
 };
@@ -35,24 +38,14 @@ class Trie {
 private:
   TrieNode *root;
 
-  /*
-   * method:1 => pointers to strings are stored in trie
-   * method: otherwise => strings are stored in trie
-   */
-  int method;
-
 public:
   Trie();
 
   TrieNode *getRoot();
 
-  void setMethod(int method);
-
   void insertWord(std::string *word, std::string suffix);
 
-  void insertWord(std::string word, std::string suffix);
-
-  std::vector<std::string> searchWord(std::string word);
+  std::vector<std::string *> searchWord(std::string word);
 
   void deleteWord(std::string word);
 
