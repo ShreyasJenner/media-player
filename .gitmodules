@@ -7,3 +7,6 @@
 [submodule "extern/audio-metadata-reader"]
 	path = extern/audio-metadata-reader
 	url = https://github.com/ShreyasJenner/audio-metadata-reader
+[submodule "extern/FTXUI/_deps/ftxui-src"]
+	path = extern/FTXUI/_deps/ftxui-src
+	url = https://github.com/ArthurSonzogni/FTXUI
