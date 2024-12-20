@@ -1,5 +1,5 @@
 .help/
-data/
+tests/
 
 extern/*/build/
 extern/*/bin

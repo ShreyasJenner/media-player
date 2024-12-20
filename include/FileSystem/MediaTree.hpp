@@ -8,8 +8,8 @@
 
 class Node {
 public:
-  std::string path;
-  std::string filename;
+  std::wstring path;
+  std::wstring filename;
   // bool that is set to true if pointing to a track
   bool track;
 

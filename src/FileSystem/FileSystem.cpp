@@ -2,7 +2,7 @@
 namespace fs = std::filesystem;
 
 /* Parameterized constructor that stores the path and creates the MediaTree */
-FileSystem::FileSystem(std::string path, FileSystemMode mode) {
+FileSystem::FileSystem(std::wstring path, FileSystemMode mode) {
   this->mt = new MediaTree(mode);
   this->trie = new Trie();
   this->path = path;
@@ -10,7 +10,7 @@ FileSystem::FileSystem(std::string path, FileSystemMode mode) {
 }
 
 /* Function to get Path */
-std::string FileSystem::getPath() { return this->path; }
+std::wstring FileSystem::getPath() { return this->path; }
 
 /* Function to get Trie */
 Trie *FileSystem::getTrie() { return this->trie; }
@@ -51,6 +51,8 @@ void FileSystem::createMediaTree() {
         if (entry.is_symlink()) {
           std::cout << "Skipping symlink: " << entry.path() << '\n';
           continue;
+
+          // skip directories that start with .
         } else if (entry.path().filename().string()[0] == '.') {
           // NOTE: use below line for debugging
           //  std::cout << "Skipping " << entry.path().filename().string() <<
@@ -60,8 +62,8 @@ void FileSystem::createMediaTree() {
 
         // create a new node and set the data based on itr
         Node *ptr = new Node;
-        ptr->filename = entry.path().filename();
-        ptr->path = entry.path();
+        ptr->filename = entry.path().filename().wstring();
+        ptr->path = entry.path().wstring();
         ptr->child = nullptr;
         ptr->sibling = nullptr;
         ptr->track = !entry.is_directory();

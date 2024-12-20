@@ -15,13 +15,13 @@ class FileSystem {
 private:
   MediaTree *mt;
   Trie *trie;
-  std::string path;
+  std::wstring path;
   FileSystemMode mode;
 
 public:
-  FileSystem(std::string path, FileSystemMode mode);
+  FileSystem(std::wstring path, FileSystemMode mode);
 
-  std::string getPath();
+  std::wstring getPath();
 
   Trie *getTrie();
 

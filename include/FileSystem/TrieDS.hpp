@@ -4,29 +4,18 @@
 #include "FileSystem/FileSystemEnums.hpp"
 #include <iostream>
 #include <queue>
+#include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
-
-#define CHILDREN_COUNT 96
-#define UNICODE_OFFSET 32
 
 class TrieNode {
 public:
   bool endofword;
 
-  // TODO: add support for script of japanese, korean, chinese and other
-  // languages
-  //
-  // NOTE: Refer: https://en.wikipedia.org/wiki/List_of_Unicode_characters
-  // The children array follow the format of unicode characters for Basic Latin
-  // The array from 0 to 94 represent the characters as seen in the Basic Latin
-  // section
-  // UNICODE_OFFSET is subtracted from the integer value of the character to get
-  // its index in the children array as the first 31 unicode characters are
-  // special characters and don't need to be represented in the array
-  TrieNode *children[96];
+  std::unordered_map<wchar_t, TrieNode *> hashmap;
 
-  std::vector<std::string *> word_ptrs;
+  std::vector<std::wstring *> word_ptrs;
 
   // NOTE: initialized to NODE_NONE in the constructor
   NodeType type;
@@ -43,19 +32,19 @@ public:
 
   TrieNode *getRoot();
 
-  void insertWord(std::string *word, std::string suffix, NodeType type);
+  void insertWord(std::wstring *word, std::wstring suffix, NodeType type);
 
-  std::vector<std::tuple<std::string *, NodeType>> searchWord(std::string word);
+  std::set<std::tuple<std::wstring *, NodeType>> searchWord(std::wstring word);
 
-  std::vector<std::string *> searchArtist(std::string word);
+  std::vector<std::wstring *> searchArtist(std::wstring word);
 
-  std::vector<std::string *> searchAlbum(std::string word);
+  std::vector<std::wstring *> searchAlbum(std::wstring word);
 
-  std::vector<std::string *> searchTrack(std::string word);
+  std::vector<std::wstring *> searchTrack(std::wstring word);
 
-  void deleteWord(std::string word);
+  void deleteWord(std::wstring word);
 
-  bool startsWith(std::string prefix);
+  bool startsWith(std::wstring prefix);
 
   void displayTrie(TrieNode *itr);
 

@@ -1,4 +1,6 @@
+#include <chrono>
 #include <filesystem>
+#include <locale>
 #include <thread>
 #include <vector>
 
@@ -15,6 +17,8 @@ extern "C" {
 }
 
 int main(int argc, char **argv) {
+  setlocale(LC_ALL, "");
+
   // check if argument has been passed
   /*if (argc < 2) {*/
   /*  printf("Arguments not passed\n");*/
@@ -51,14 +55,15 @@ int main(int argc, char **argv) {
    * message");*/
 
   // NOTE: file system
-  FileSystem fs("/media", FORMATTED_DIR_STRUCTURE);
+  FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
 
   fs.createMediaTree();
+
   fs.createTrie();
 
-  std::vector<std::string *> temp = fs.getTrie()->searchTrack("Stick");
+  std::vector<std::wstring *> temp = fs.getTrie()->searchAlbum(L"人");
   for (auto tem : temp) {
-    std::cout << *tem << '\n';
+    std::wcout << *tem << '\n';
   }
 
   return 0;

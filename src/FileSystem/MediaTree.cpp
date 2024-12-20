@@ -183,7 +183,7 @@ void MediaTree::helperDisplayMediaTree(Node *ptr, int tab) {
   // print out twice tabs filename
   std::cout << std::string(2 * tab, ' ');
 
-  std::cout << ptr->filename << '\n';
+  std::wcout << ptr->filename << '\n';
 
   // if is a track, then print all sibling tracks
   if (!ptr->track) {
@@ -194,7 +194,7 @@ void MediaTree::helperDisplayMediaTree(Node *ptr, int tab) {
     // recurse siblings child
     while (ptr->sibling != nullptr && ptr->sibling->child != nullptr) {
       std::cout << std::string(2 * tab, ' ');
-      std::cout << ptr->sibling->filename << '\n';
+      std::wcout << ptr->sibling->filename << '\n';
       helperDisplayMediaTree(ptr->sibling->child, tab + 1);
       ptr = ptr->sibling;
     }
@@ -202,7 +202,7 @@ void MediaTree::helperDisplayMediaTree(Node *ptr, int tab) {
     // print siblings
     while (ptr->sibling != nullptr) {
       std::cout << std::string(2 * tab, ' ');
-      std::cout << ptr->sibling->filename << '\n';
+      std::wcout << ptr->sibling->filename << '\n';
       ptr = ptr->sibling;
     }
   }

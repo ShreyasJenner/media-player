@@ -4,11 +4,8 @@
 TrieNode::TrieNode() {
   int i;
 
-  // set endofword to false and initialize all children pointers to null
+  // set endofword to false
   this->endofword = false;
-  for (i = 0; i < CHILDREN_COUNT; i++) {
-    this->children[i] = nullptr;
-  }
 
   // set node type to NONE
   this->type = NODE_NONE;
@@ -25,9 +22,9 @@ TrieNode *Trie::getRoot() { return this->root; }
  * This function stores pointers to words in the media tree to save on space
  * It must be called after the creation of the media tree
  */
-void Trie::insertWord(std::string *word, std::string suffix, NodeType type) {
+void Trie::insertWord(std::wstring *word, std::wstring suffix, NodeType type) {
   // if suffix is empty, then exit function
-  if (suffix == "") {
+  if (suffix == L"") {
     return;
   }
 
@@ -38,33 +35,20 @@ void Trie::insertWord(std::string *word, std::string suffix, NodeType type) {
   itr = this->root;
 
   // iterate through characters of string
-  for (idx = 0; idx < suffix.length(); idx++) {
-    int char_idx = suffix[idx] - UNICODE_OFFSET;
+  for (char c : suffix) {
 
-    // NOTE: korean characters occasionally take on a value less that that of
-    // UNICODE_OFFSET.
-    // The first if condition has been temporarily added to handle that
-    //  TODO: add support for unicode characters of other langueges such as
-    //  japanese, korean, chinese etc
-    //  Currently does not support non-english characters
-    if (char_idx < 0 || char_idx >= 96) {
-      return;
-    }
-
-    // TODO: convert alphabets to lower case; handle special symbols such as $,
-    // @ etc...
-    //  if character index points to nullptr, create a new TrieNode
-    if (itr->children[char_idx] == nullptr) {
-      itr->children[char_idx] = new TrieNode();
+    // if character does not exist in hasmap, create a trienode and add it to
+    // the hashmap
+    if (itr->hashmap.find(c) == nullptr) {
+      itr->hashmap[c] = new TrieNode();
     }
 
     // move iterator to child node
-    itr = itr->children[char_idx];
+    itr = itr->hashmap[c];
   }
 
   // if word end has been reached, set endofword to true, store the word ptr in
   // the corresponding node and mark TrieNodeType
-
   itr->endofword = true;
   itr->type = type;
   itr->word_ptrs.push_back(word);
@@ -75,13 +59,14 @@ void Trie::insertWord(std::string *word, std::string suffix, NodeType type) {
 
 /*
  * Function to search for a word in the Trie
- * Returns a vector that stores all nodes that have strings that match the
+ * Returns a set that stores all nodes that have strings that match the
  * corresponding pattern in their filename parameter
+ * Set is used so that only unique word ptrs are returned
  */
-std::vector<std::tuple<std::string *, NodeType>>
-Trie::searchWord(std::string word) {
+std::set<std::tuple<std::wstring *, NodeType>>
+Trie::searchWord(std::wstring word) {
 
-  std::vector<std::tuple<std::string *, NodeType>> node_list;
+  std::set<std::tuple<std::wstring *, NodeType>> node_set;
   std::queue<TrieNode *> list;
   TrieNode *itr;
 
@@ -90,13 +75,12 @@ Trie::searchWord(std::string word) {
 
   // iterate through characters in the word
   for (char c : word) {
-    int idx = c - UNICODE_OFFSET;
 
     // if index points to nullptr, word does not exist and exit loop
-    if (itr->children[idx] == nullptr) {
+    if (itr->hashmap[c] == nullptr) {
       break;
     }
-    itr = itr->children[idx];
+    itr = itr->hashmap[c];
   }
 
   // go through all of current nodes children and add to queue return all
@@ -108,21 +92,21 @@ Trie::searchWord(std::string word) {
     itr = list.front();
     list.pop();
 
-    // search through the nodes children and store all valid nodes
-    for (auto child : itr->children) {
-      if (child != nullptr) {
-        list.push(child);
+    // search through the nodes hashmap and store all valid nodes
+    for (std::pair<wchar_t, TrieNode *> child : itr->hashmap) {
+      if (child.second != nullptr) {
+        list.push(child.second);
         // if current node marks end of a word, then store all words and their
         // associated type into the node list
-        if (child->endofword) {
-          for (std::string *word : child->word_ptrs)
-            node_list.push_back(std::make_tuple(word, child->type));
+        if (child.second->endofword) {
+          for (std::wstring *word : child.second->word_ptrs)
+            node_set.insert(std::make_tuple(word, child.second->type));
         }
       }
     }
   }
 
-  return node_list;
+  return node_set;
 }
 
 /* Function to search for artists
@@ -131,9 +115,9 @@ Trie::searchWord(std::string word) {
 // TODO: check for better implementation of this function
 // Possible alternatives are having 3 different tries; one for each possible
 // value in NodeType
-std::vector<std::string *> Trie::searchArtist(std::string word) {
-  std::vector<std::string *> artist_list;
-  std::vector<std::tuple<std::string *, NodeType>> all_ptrs;
+std::vector<std::wstring *> Trie::searchArtist(std::wstring word) {
+  std::vector<std::wstring *> artist_list;
+  std::set<std::tuple<std::wstring *, NodeType>> all_ptrs;
 
   // get pointers to nodes that match the given pattern
   all_ptrs = this->searchWord(word);
@@ -154,9 +138,9 @@ std::vector<std::string *> Trie::searchArtist(std::string word) {
 // TODO: check for better implementation of this function
 // Possible alternatives are having 3 different tries; one for each possible
 // value in NodeType
-std::vector<std::string *> Trie::searchAlbum(std::string word) {
-  std::vector<std::string *> album_list;
-  std::vector<std::tuple<std::string *, NodeType>> all_ptrs;
+std::vector<std::wstring *> Trie::searchAlbum(std::wstring word) {
+  std::vector<std::wstring *> album_list;
+  std::set<std::tuple<std::wstring *, NodeType>> all_ptrs;
 
   // get pointers to nodes that match the given pattern
   all_ptrs = this->searchWord(word);
@@ -177,9 +161,9 @@ std::vector<std::string *> Trie::searchAlbum(std::string word) {
 // TODO: check for better implementation of this function
 // Possible alternatives are having 3 different tries; one for each possible
 // value in NodeType
-std::vector<std::string *> Trie::searchTrack(std::string word) {
-  std::vector<std::string *> track_list;
-  std::vector<std::tuple<std::string *, NodeType>> all_ptrs;
+std::vector<std::wstring *> Trie::searchTrack(std::wstring word) {
+  std::vector<std::wstring *> track_list;
+  std::set<std::tuple<std::wstring *, NodeType>> all_ptrs;
 
   // get pointers to nodes that match the given pattern
   all_ptrs = this->searchWord(word);
@@ -195,7 +179,7 @@ std::vector<std::string *> Trie::searchTrack(std::string word) {
 }
 
 /* Function to check if any word with given prefix exists in the Trie */
-bool Trie::startsWith(std::string prefix) {
+bool Trie::startsWith(std::wstring prefix) {
   TrieNode *itr;
 
   // set iterator to root node
@@ -203,13 +187,12 @@ bool Trie::startsWith(std::string prefix) {
 
   // iterate through characters in the word
   for (char c : prefix) {
-    int idx = c - UNICODE_OFFSET;
 
-    // if index points to nullptr, word does not exist with given prefix
-    if (itr->children[idx] == nullptr) {
+    // if entry not in hashmap, word does not exist with given prefix
+    if (itr->hashmap[c] == nullptr) {
       return false;
     }
-    itr = itr->children[idx];
+    itr = itr->hashmap[c];
   }
 
   return true;
@@ -221,15 +204,15 @@ void Trie::displayTrie(TrieNode *itr) {
     return;
 
   // iterate through iterators children
-  for (TrieNode *child : itr->children) {
-    if (child != nullptr) {
-      displayTrie(child);
+  for (std::pair<wchar_t, TrieNode *> pair : itr->hashmap) {
+    if (pair.second != nullptr) {
+      displayTrie(pair.second);
     }
   }
 
   if (itr->endofword == true) {
-    for (std::string *word_ptr : itr->word_ptrs) {
-      std::cout << *word_ptr << '\n';
+    for (std::wstring *word_ptr : itr->word_ptrs) {
+      std::wcout << *word_ptr << '\n';
     }
   }
 }
@@ -255,10 +238,10 @@ Trie::~Trie() {
     elements.pop();
 
     // iterate through the children of the current node
-    for (TrieNode *child : itr->children) {
+    for (std::pair<wchar_t, TrieNode *> pair : itr->hashmap) {
       // add the child to queue if it exists
-      if (child != nullptr) {
-        elements.push(child);
+      if (pair.second != nullptr) {
+        elements.push(pair.second);
       }
     }
 
