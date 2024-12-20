@@ -57,10 +57,6 @@ int main(int argc, char **argv) {
   // NOTE: file system
   FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
 
-  fs.createMediaTree();
-
-  fs.createTrie();
-
   std::vector<std::wstring *> temp = fs.getTrie()->searchAlbum(L"人");
   for (auto tem : temp) {
     std::wcout << *tem << '\n';

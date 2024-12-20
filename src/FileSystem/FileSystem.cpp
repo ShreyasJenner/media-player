@@ -7,6 +7,8 @@ FileSystem::FileSystem(std::wstring path, FileSystemMode mode) {
   this->trie = new Trie();
   this->path = path;
   this->mode = mode;
+  this->createMediaTree();
+  this->createTrie();
 }
 
 /* Function to get Path */
@@ -54,9 +56,8 @@ void FileSystem::createMediaTree() {
 
           // skip directories that start with .
         } else if (entry.path().filename().string()[0] == '.') {
-          // NOTE: use below line for debugging
-          //  std::cout << "Skipping " << entry.path().filename().string() <<
-          //  '\n';
+          logerror(__FILE__, __LINE__, __func__, LOGLEVEL::INFO,
+                   "File with . ignored");
           continue;
         }
 
@@ -93,7 +94,9 @@ void FileSystem::createMediaTree() {
       }
     }
   } else {
-    std::cout << "Mode is not yet supported\n";
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "Mode is not yet supported");
+    return;
   }
 }
 
@@ -104,6 +107,12 @@ void FileSystem::createTrie() {
   if (this->mode == FORMATTED_DIR_STRUCTURE) {
     // get a vector of pointers to string in the media tree
     MediaTree *mt = this->getMediaTree();
+    if (mt == nullptr) {
+      logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+               "MediaTree has not been created");
+      return;
+    }
+
     std::vector<Node *> word_list_ptr = mt->getAllPtrs();
 
     // iterate through vector and construct trie
@@ -112,7 +121,9 @@ void FileSystem::createTrie() {
       this->getTrie()->insertWord(&node->filename, node->filename, node->type);
     }
   } else {
-    std::cout << "Mode not yet supported\n";
+    logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,
+             "Mode not yet supported");
+    return;
   }
 }
 

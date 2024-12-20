@@ -10,6 +10,7 @@
 #include "FileSystem/FileSystemEnums.hpp"
 #include "FileSystem/MediaTree.hpp"
 #include "FileSystem/TrieDS.hpp"
+#include "log/log.hpp"
 
 class FileSystem {
 private:
