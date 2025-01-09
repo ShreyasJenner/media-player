@@ -6,7 +6,9 @@
 
 #include "FileSystem/FileSystem.hpp"
 #include "FileSystem/TrieDS.hpp"
-#include "key_event/key_event.hpp"
+
+#include "tui/tui.hpp"
+
 #include "log/log.hpp"
 #include "media/header.hpp"
 #include "media/media.hpp"
@@ -55,12 +57,16 @@ int main(int argc, char **argv) {
    * message");*/
 
   // NOTE: file system
-  FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
+  // FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
 
-  std::vector<std::wstring *> temp = fs.getTrie()->searchAlbum(L"人");
-  for (auto tem : temp) {
-    std::wcout << *tem << '\n';
-  }
+  // std::vector<std::wstring *> temp = fs.getTrie()->searchAlbum(L"人");
+  // for (auto tem : temp) {
+  //   std::wcout << *tem << '\n';
+  // }
+
+  // NOTE: tui system
+  TUI tui;
+  tui.run();
 
   return 0;
 }
