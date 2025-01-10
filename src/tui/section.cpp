@@ -26,6 +26,12 @@ void Section::init(int rows, int cols, int startx, int starty) {
   wrefresh(this->win);
 }
 
+/* Function to return pointer to window */
+WINDOW *Section::get_win() { return this->win; }
+
+/* Function to return pointer to panel */
+PANEL *Section::get_panel() { return this->panel; }
+
 /* Destructor for Section class */
 Section::~Section() {
 

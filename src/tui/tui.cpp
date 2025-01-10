@@ -28,8 +28,8 @@ void TUI::get_term_size() {
 void TUI::create_sec1() {
   this->section1.init(this->term_rows, this->term_cols / 3, 0, 0);
   this->section1.create_menu();
-  touchwin(this->section1.win);
-  wrefresh(this->section1.win);
+  touchwin(this->section1.get_win());
+  wrefresh(this->section1.get_win());
 }
 
 /* Function to run the tui */
@@ -38,7 +38,7 @@ void TUI::run() {
   // create the sections
   this->create_sec1();
 
-  // NOTE: temp code to pause screen so that we can see curses output
+  // NOTE: temp code to refresh screen so that we can see curses output
   update_panels();
   doupdate();
 
