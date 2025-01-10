@@ -19,8 +19,8 @@ Section1::Section1() {
 void Section1::configure_menu_settings() {
 
   // set menu window and sub window
-  this->subwin = derwin(this->win, 4, this->cols - 1, 1, 1);
-  set_menu_win(this->menu, this->win);
+  this->subwin = derwin(this->wins[0], 4, this->cols - 1, 1, 1);
+  set_menu_win(this->menu, this->wins[0]);
   set_menu_sub(this->menu, this->subwin);
 
   // configure menu settings
@@ -49,7 +49,7 @@ void Section1::create_menu() {
   this->configure_menu_settings();
 
   post_menu(this->menu);
-  wrefresh(this->win);
+  wrefresh(this->wins[0]);
 }
 
 /* Function that acts as menu driver for menu */
@@ -72,7 +72,7 @@ void Section1::menu_driver(int key) {
   }
 
   // refresh the menu window
-  wrefresh(this->win);
+  wrefresh(this->wins[0]);
 }
 
 /* Function to return pointer to selected item in menu */

@@ -15,18 +15,21 @@ extern "C" {
 class Section {
 protected:
   int startx, starty, rows, cols;
+  int win_count;
 
-  WINDOW *win;
-  PANEL *panel;
+  WINDOW **wins;
+  PANEL **panels;
 
 public:
   Section();
 
+  void init(int win_count);
+
   void init(int rows, int cols, int startx, int starty);
 
-  WINDOW *get_win();
+  WINDOW **get_win();
 
-  PANEL *get_panel();
+  PANEL **get_panel();
 
   ~Section();
 };

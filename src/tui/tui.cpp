@@ -26,10 +26,11 @@ void TUI::get_term_size() {
 
 /* Function to create section1 */
 void TUI::create_sec1() {
+  this->section1.init(1);
   this->section1.init(this->term_rows, this->term_cols / 3, 0, 0);
   this->section1.create_menu();
-  touchwin(this->section1.get_win());
-  wrefresh(this->section1.get_win());
+  touchwin(this->section1.get_win()[0]);
+  wrefresh(this->section1.get_win()[0]);
 }
 
 /* Function to run the tui */
