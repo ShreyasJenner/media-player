@@ -57,15 +57,16 @@ int main(int argc, char **argv) {
    * message");*/
 
   // NOTE: file system
-  // FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
+  FileSystem fs(L"/media", FORMATTED_DIR_STRUCTURE);
 
-  // std::vector<std::wstring *> temp = fs.getTrie()->searchAlbum(L"人");
+  // std::vector<Node *> temp = fs.getMediaTree()->getAlbumPtrs();
   // for (auto tem : temp) {
-  //   std::wcout << *tem << '\n';
+  //   std::wcout << tem->wpath << '\n';
   // }
+  // std::wcout << temp[55]->wpath << '\n';
 
   // NOTE: tui system
-  TUI tui;
+  TUI tui(&fs);
   tui.run();
 
   return 0;

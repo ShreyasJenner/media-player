@@ -1,8 +1,16 @@
 #ifndef SECTION_HPP
 #define SECTION_HPP
 
-#define SECTION_1_OPTIONS 3
+#define SECTION_1_OPT_COUNT 3
 #define OPTION_LEN 7
+
+#define SECTION_2_WIN_COUNT 4
+#define ARTIST_WINDOW_INDEX 0
+#define ALBUM_WINDOW_INDEX 1
+#define SEARCH_WINDOW_INDEX 2
+#define LYRIC_WINDOW_INDEX 3
+
+#include "FileSystem/FileSystem.hpp"
 
 extern "C" {
 #include <menu.h>
@@ -37,7 +45,7 @@ public:
 class Section1 : public Section {
 private:
   int item_count;
-  char options[SECTION_1_OPTIONS][OPTION_LEN];
+  char options[SECTION_1_OPT_COUNT][OPTION_LEN];
 
   WINDOW *subwin;
   ITEM *selected;
@@ -56,6 +64,27 @@ public:
   ITEM *get_selected_item();
 
   ~Section1();
+};
+
+class Section2 : public Section {
+private:
+  int item_count[SECTION_2_WIN_COUNT];
+
+  WINDOW *subwin[SECTION_2_WIN_COUNT];
+  ITEM *selected;
+  ITEM **items[SECTION_2_WIN_COUNT];
+  MENU *menu[SECTION_2_WIN_COUNT];
+
+public:
+  Section2();
+
+  void menu_driver(int key, int menu_index);
+
+  void create_sec1_artist_window(std::vector<Node *> artist_ptrs);
+
+  void render_selected_win(const char *selected);
+
+  ~Section2();
 };
 
 #endif // !SECTION_HPP

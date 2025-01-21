@@ -35,7 +35,8 @@ void Section1::create_menu() {
   int i;
 
   // allocate space for the item array
-  this->item_count = SECTION_1_OPTIONS;
+  this->item_count = SECTION_1_OPT_COUNT;
+
   this->items = (ITEM **)calloc(this->item_count + 1, sizeof(ITEM *));
 
   // populate the item array
@@ -83,10 +84,13 @@ Section1::~Section1() {
   int i;
 
   // free the items and the menu
-  for (i = 0; i < this->item_count; i++) {
-    if (this->items[i] != NULL) {
-      free_item(this->items[i]);
+  if (this->items != NULL) {
+    for (i = 0; i < this->item_count; i++) {
+      if (this->items[i] != NULL) {
+        free_item(this->items[i]);
+      }
     }
+    free(this->items);
   }
 
   if (this->menu != NULL) {

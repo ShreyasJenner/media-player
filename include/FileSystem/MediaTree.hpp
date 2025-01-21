@@ -8,8 +8,12 @@
 
 class Node {
 public:
-  std::wstring path;
-  std::wstring filename;
+  // wide string storage
+  std::wstring wpath;
+  std::wstring wfilename;
+  // multi-byte encoding of wide strings
+  std::string mbpath;
+  std::string mbfilename;
   // bool that is set to true if pointing to a track
   bool track;
 

@@ -22,6 +22,8 @@ MediaTree *FileSystem::getMediaTree() { return this->mt; }
 
 /* Function to create media tree */
 void FileSystem::createMediaTree() {
+  char temp_str[MAX_PATH_LEN * sizeof(wchar_t)];
+
   // if mode being used is formatted dir structure
   if (this->mode == FORMATTED_DIR_STRUCTURE) {
     std::queue<Node *> entries;
@@ -29,8 +31,16 @@ void FileSystem::createMediaTree() {
 
     // set MediaTree root details
     itr = this->getMediaTree()->getRoot();
-    itr->filename = this->getPath();
-    itr->path = this->getPath();
+    itr->wfilename = this->getPath();
+    itr->wpath = this->getPath();
+    // store the multi-byte encoded wide strings
+    std::wcstombs(temp_str, itr->wpath.c_str(),
+                  sizeof(wchar_t) * itr->wpath.length());
+    itr->mbpath = temp_str;
+    // store the multi-byte encoded wide strings
+    std::wcstombs(temp_str, itr->wfilename.c_str(),
+                  sizeof(wchar_t) * itr->wpath.length());
+    itr->mbfilename = temp_str;
     itr->track = false;
     itr->sibling = nullptr;
     itr->child = nullptr;
@@ -48,7 +58,7 @@ void FileSystem::createMediaTree() {
       Node *lastchild = nullptr;
 
       // iterate through the path and add it to the queue
-      for (const auto &entry : fs::directory_iterator(itr->path)) {
+      for (const auto &entry : fs::directory_iterator(itr->wpath)) {
         // handle symlinks that might cause infinite cyclic loops
         if (entry.is_symlink()) {
           std::cout << "Skipping symlink: " << entry.path() << '\n';
@@ -63,8 +73,16 @@ void FileSystem::createMediaTree() {
 
         // create a new node and set the data based on itr
         Node *ptr = new Node;
-        ptr->filename = entry.path().filename().wstring();
-        ptr->path = entry.path().wstring();
+        ptr->wfilename = entry.path().filename().wstring();
+        ptr->wpath = entry.path().wstring();
+        // store the multi-byte encoded wide strings
+        std::wcstombs(temp_str, ptr->wpath.c_str(),
+                      sizeof(wchar_t) * ptr->wpath.length());
+        ptr->mbpath = temp_str;
+        // store the multi-byte encoded wide strings
+        std::wcstombs(temp_str, ptr->wfilename.c_str(),
+                      sizeof(wchar_t) * ptr->wpath.length());
+        ptr->mbfilename = temp_str;
         ptr->child = nullptr;
         ptr->sibling = nullptr;
         ptr->track = !entry.is_directory();
@@ -118,7 +136,8 @@ void FileSystem::createTrie() {
     // iterate through vector and construct trie
     for (Node *node : word_list_ptr) {
       // store pointers to strings in the trie
-      this->getTrie()->insertWord(&node->filename, node->filename, node->type);
+      this->getTrie()->insertWord(&node->wfilename, node->wfilename,
+                                  node->type);
     }
   } else {
     logerror(__FILE__, __LINE__, __func__, LOGLEVEL::ERROR,

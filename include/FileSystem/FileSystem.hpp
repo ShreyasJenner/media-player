@@ -1,6 +1,9 @@
 #ifndef READDIR_HPP
 #define READDIR_HPP
 
+#define MAX_PATH_LEN 255
+
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <queue>
