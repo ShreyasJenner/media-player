@@ -61,6 +61,7 @@ void TUI::create_sec2() {
 }
 
 /* Function to run the tui */
+// TODO: remove driver code in function and use in KeyHandling module
 void TUI::run() {
 
   // create the sections
@@ -89,6 +90,12 @@ void TUI::run() {
         while (ach != 'q') {
           ach = getch();
           this->section2.menu_driver(ach, ARTIST_WINDOW_INDEX);
+
+          // NOTE: temp code to handle enter key press
+          if (ach == KEY_ENTER || ach == 10) {
+            this->section2.populate_sec1_artist_discog_window(
+                (Node *)item_userptr(this->section2.get_selected_item()));
+          }
         }
       }
     }

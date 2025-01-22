@@ -39,7 +39,7 @@ void FileSystem::createMediaTree() {
     itr->mbpath = temp_str;
     // store the multi-byte encoded wide strings
     std::wcstombs(temp_str, itr->wfilename.c_str(),
-                  sizeof(wchar_t) * itr->wpath.length());
+                  sizeof(wchar_t) * itr->wfilename.length());
     itr->mbfilename = temp_str;
     itr->track = false;
     itr->sibling = nullptr;
@@ -73,7 +73,7 @@ void FileSystem::createMediaTree() {
 
         // create a new node and set the data based on itr
         Node *ptr = new Node;
-        ptr->wfilename = entry.path().filename().wstring();
+        ptr->wfilename = entry.path().stem().wstring();
         ptr->wpath = entry.path().wstring();
         // store the multi-byte encoded wide strings
         std::wcstombs(temp_str, ptr->wpath.c_str(),
@@ -81,7 +81,7 @@ void FileSystem::createMediaTree() {
         ptr->mbpath = temp_str;
         // store the multi-byte encoded wide strings
         std::wcstombs(temp_str, ptr->wfilename.c_str(),
-                      sizeof(wchar_t) * ptr->wpath.length());
+                      sizeof(wchar_t) * ptr->wfilename.length());
         ptr->mbfilename = temp_str;
         ptr->child = nullptr;
         ptr->sibling = nullptr;

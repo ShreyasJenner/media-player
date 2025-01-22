@@ -4,11 +4,12 @@
 #define SECTION_1_OPT_COUNT 3
 #define OPTION_LEN 7
 
-#define SECTION_2_WIN_COUNT 4
+#define SECTION_2_WIN_COUNT 5
 #define ARTIST_WINDOW_INDEX 0
 #define ALBUM_WINDOW_INDEX 1
 #define SEARCH_WINDOW_INDEX 2
 #define LYRIC_WINDOW_INDEX 3
+#define ARTIST_DISCOG_INDEX 4
 
 #include "FileSystem/FileSystem.hpp"
 
@@ -82,7 +83,15 @@ public:
 
   void create_sec1_artist_window(std::vector<Node *> artist_ptrs);
 
+  void create_sec1_artist_discog_window();
+
+  void populate_sec1_artist_discog_window(Node *artist_ptr);
+
+  void depopulate_sec1_artist_discog_window();
+
   void render_selected_win(const char *selected);
+
+  ITEM *get_selected_item();
 
   ~Section2();
 };
