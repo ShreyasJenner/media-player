@@ -1,2 +1,6 @@
 .help/
-data/
+tests/
+
+extern/*/build/
+extern/*/bin
+extern/*/*.o
