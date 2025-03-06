@@ -83,11 +83,13 @@ public:
 
   void create_sec1_artist_window(std::vector<Node *> artist_ptrs);
 
-  void create_sec1_artist_discog_window();
-
   void populate_sec1_artist_discog_window(Node *artist_ptr);
 
   void depopulate_sec1_artist_discog_window();
+
+  void create_sec1_album_window(std::vector<Node *> album_ptrs);
+
+  void create_sec1_search_window(Trie *tr);
 
   void render_selected_win(const char *selected);
 

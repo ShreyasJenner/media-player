@@ -58,6 +58,8 @@ void TUI::create_sec2() {
   // create different windows for each option in Section1
   this->section2.create_sec1_artist_window(
       this->fs->getMediaTree()->getArtistPtrs());
+  this->section2.create_sec1_album_window(
+      this->fs->getMediaTree()->getAlbumPtrs());
 }
 
 /* Function to run the tui */
@@ -66,6 +68,8 @@ void TUI::run() {
 
   // create the sections
   this->create_sec1();
+
+  // TODO: complete section 2 code
   this->create_sec2();
 
   // NOTE: temp code to refresh screen so that we can see curses output
@@ -96,6 +100,13 @@ void TUI::run() {
             this->section2.populate_sec1_artist_discog_window(
                 (Node *)item_userptr(this->section2.get_selected_item()));
           }
+        }
+      } else if (!strcmp("Album",
+                         item_name(this->section1.get_selected_item()))) {
+        int ach = 'a';
+        while (ach != 'q') {
+          ach = getch();
+          this->section2.menu_driver(ach, ALBUM_WINDOW_INDEX);
         }
       }
     }

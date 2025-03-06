@@ -31,21 +31,21 @@ void Section2::menu_driver(int key, int menu_index) {
   // move selection in menu
   switch (key) {
   case 'j':
-    ::menu_driver(this->menu[ARTIST_WINDOW_INDEX], REQ_DOWN_ITEM);
+    ::menu_driver(this->menu[menu_index], REQ_DOWN_ITEM);
     break;
 
   case 'k':
-    ::menu_driver(this->menu[ARTIST_WINDOW_INDEX], REQ_UP_ITEM);
+    ::menu_driver(this->menu[menu_index], REQ_UP_ITEM);
     break;
 
     // enter key to store selected item
   case 10:
   case KEY_ENTER:
-    this->selected = current_item(this->menu[ARTIST_WINDOW_INDEX]);
+    this->selected = current_item(this->menu[menu_index]);
   }
 
   // refresh the menu window
-  wrefresh(this->wins[ARTIST_WINDOW_INDEX]);
+  wrefresh(this->wins[menu_index]);
 }
 
 /* Function to create window for artist option in Section1
@@ -135,7 +135,7 @@ void Section2::populate_sec1_artist_discog_window(Node *artist_ptr) {
   // create the menu and configure it
   this->menu[ARTIST_DISCOG_INDEX] = new_menu(this->items[ARTIST_DISCOG_INDEX]);
 
-  // configure the settings for the artist list menu
+  // configure the settings for the artist discography menu
   this->subwin[ARTIST_DISCOG_INDEX] = derwin(
       this->wins[ARTIST_DISCOG_INDEX], this->rows - 3, this->cols - 2, 2, 1);
   set_menu_win(this->menu[ARTIST_DISCOG_INDEX],
@@ -180,6 +180,62 @@ void Section2::depopulate_sec1_artist_discog_window() {
   delwin(this->subwin[ARTIST_DISCOG_INDEX]);
 }
 
+/* Function to create album window for Section1 album option
+ * The window displays a list of albums that can be selected and opened to see
+ * the track list in the album
+ */
+void Section2::create_sec1_album_window(std::vector<Node *> album_ptrs) {
+  int i;
+
+  // allocate space for the item array
+  this->item_count[ALBUM_WINDOW_INDEX] = album_ptrs.size();
+
+  this->items[ALBUM_WINDOW_INDEX] =
+      (ITEM **)calloc(this->item_count[ALBUM_WINDOW_INDEX] + 1, sizeof(ITEM *));
+
+  // populate the item array and associate the corresponding node ptr with the
+  // item ptr
+  for (i = 0; i < this->item_count[ALBUM_WINDOW_INDEX]; i++) {
+    this->items[ALBUM_WINDOW_INDEX][i] = new_item(
+        album_ptrs[i]->mbfilename.c_str(), album_ptrs[i]->mbpath.c_str());
+    set_item_userptr(this->items[ALBUM_WINDOW_INDEX][i], album_ptrs[i]);
+  }
+  this->items[ALBUM_WINDOW_INDEX][this->item_count[ALBUM_WINDOW_INDEX]] = NULL;
+
+  // create the menu and configure it
+  this->menu[ALBUM_WINDOW_INDEX] = new_menu(this->items[ALBUM_WINDOW_INDEX]);
+
+  // configure the settings for the album list menu
+  this->subwin[ALBUM_WINDOW_INDEX] = derwin(
+      this->wins[ALBUM_WINDOW_INDEX], this->rows - 3, this->cols - 2, 2, 1);
+  set_menu_win(this->menu[ALBUM_WINDOW_INDEX], this->wins[ALBUM_WINDOW_INDEX]);
+  set_menu_sub(this->menu[ALBUM_WINDOW_INDEX],
+               this->subwin[ALBUM_WINDOW_INDEX]);
+
+  // put "Albums" title for menu
+  wattron(this->wins[ALBUM_WINDOW_INDEX], A_BOLD | A_UNDERLINE);
+  mvwprintw(this->wins[ALBUM_WINDOW_INDEX], 1, 4, "%s", "Albums");
+  wattroff(this->wins[ALBUM_WINDOW_INDEX], A_BOLD | A_UNDERLINE);
+
+  // configure menu settings
+  set_menu_mark(this->menu[ALBUM_WINDOW_INDEX], " * ");
+  set_menu_format(this->menu[ALBUM_WINDOW_INDEX], this->rows - 3, 1);
+  menu_opts_on(this->menu[ALBUM_WINDOW_INDEX], O_ONEVALUE);
+  menu_opts_off(this->menu[ALBUM_WINDOW_INDEX], O_SHOWDESC);
+  menu_opts_off(this->menu[ALBUM_WINDOW_INDEX], O_NONCYCLIC);
+
+  post_menu(this->menu[ALBUM_WINDOW_INDEX]);
+  wrefresh(this->wins[ALBUM_WINDOW_INDEX]);
+}
+
+/* Function to create window that will allow search operations
+ * The function offers a search bar that will return all results that match the
+ * pattern Results Filtering such as only artists, only albums, only Tracks,
+ * etc. can be done
+ */
+// TODO: implement the function
+void Section2::create_sec1_search_window(Trie *tr) {}
+
 /* Function to show window corresponding to selected item in Section1 */
 void Section2::render_selected_win(const char *selected) {
 
@@ -193,8 +249,7 @@ void Section2::render_selected_win(const char *selected) {
 
     top_panel(this->get_panel()[ARTIST_WINDOW_INDEX]);
   } else if (!strcmp(selected, "Album")) {
-    // NOTE: temp code to show that album window is rendered
-    mvwprintw(this->get_win()[ALBUM_WINDOW_INDEX], 1, 1, "Album Window");
+
     top_panel(this->get_panel()[ALBUM_WINDOW_INDEX]);
   } else if (!strcmp(selected, "Search")) {
     // NOTE: temp code to show that search window is rendered
