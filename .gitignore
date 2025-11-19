@@ -1,6 +1,2 @@
-.help/
-tests/
-
-extern/*/build/
-extern/*/bin
-extern/*/*.o
+assets/
+temp/

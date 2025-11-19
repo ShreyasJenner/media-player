@@ -1,2 +1,0 @@
--I./include
--I./extern/audio-metadata-reader/include/

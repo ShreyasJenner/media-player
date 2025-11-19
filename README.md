@@ -1,24 +1,14 @@
-Attempt to implement media player
+Attempt to implement media player in python
 
-# To-DO:
-- sort the file list returned by search tree in order of parent folder and track number
+# Features:
+- support for synced lyrics
+- plays files
+- possibly playlist creation
 
-- Trie data structure is used for searching, implement Aho-Corasick algorithm
 
-
-
-### Time Measurements (Average of 10 samples)
-- createMediaTree : 3134 microseconds
-- createTrie : 45671.4 microseconds
-
-##### Commands used to get time taken by function
-```C++
-auto start = std::chrono::high_resolution_clock::now();
-
-auto stop = std::chrono::high_resolution_clock::now();
-  std::cout << "Time taken :"
-            << std::chrono::duration_cast<std::chrono::microseconds>(stop -
-                                                                     start)
-                   .count()
-            << '\n';
-```
+# Roadmap:
+## Directory Module
+- Build module that gets list of audio files recursively
+- When starting the program, the user can add a path to a directory and this is remembered by the program
+- The user can update the library, and this will rescan the directory and add new entries to the list of files available
+- Group the audio files using the metadata in them
